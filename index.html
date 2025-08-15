@@ -10,312 +10,223 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef2f9; /* Tono de fondo más suave */
+            background-color: #eef2f9;
             transition: background-color 0.3s, color 0.3s;
         }
         /* --- Estilos Modo Oscuro --- */
-        .dark body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-        }
-        .dark .main-header, .dark .bg-white-relief, .dark .kanban-column, .dark .modal-content {
-            background-color: #161b22;
-            border-color: #30363d;
-        }
-        .dark .kanban-card {
-            background-color: #21262d;
-            border-color: #30363d;
-        }
-        .dark header h2, .dark header p, .dark .kanban-column h2, .dark #chart-container h3 {
-            color: #f0f6fc;
-        }
-        .dark .text-gray-500 {
-            color: #8b949e;
-        }
-        .dark .text-gray-800 {
-            color: #f0f6fc;
-        }
-        .dark input, .dark select {
-            background-color: #0d1117;
-            border-color: #30363d;
-            color: #c9d1d9;
-        }
-        .dark input::placeholder {
-            color: #8b949e;
-        }
-        .dark .kanban-card:hover {
-           box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.25);
-           border-color: rgba(255, 255, 255, 0.15);
-        }
-        .dark .relief-button {
-            background-color: #21262d;
-            border-color: #30363d;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.2);
-        }
-        .dark .relief-button:hover {
-            background-color: #30363d;
-        }
-
+        .dark body { background-color: #0d1117; color: #c9d1d9; }
+        .dark .main-header, .dark .bg-white-relief, .dark .kanban-column, .dark .modal-content { background-color: #161b22; border-color: #30363d; }
+        .dark .kanban-card { background-color: #21262d; border-color: #30363d; }
+        .dark header h2, .dark header p, .dark .kanban-column h2, .dark #chart-container h3 { color: #f0f6fc; }
+        .dark .text-gray-500 { color: #8b949e; }
+        .dark .text-gray-800 { color: #f0f6fc; }
+        .dark input, .dark select { background-color: #0d1117; border-color: #30363d; color: #c9d1d9; }
+        .dark input::placeholder { color: #8b949e; }
+        .dark .kanban-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.25); border-color: rgba(255, 255, 255, 0.15); }
+        .dark .relief-button { background-color: #21262d; border-color: #30363d; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.2); }
+        .dark .relief-button:hover { background-color: #30363d; }
         /* --- Estilos 3D / Relieve Moderno --- */
-        .relief-border {
-            border: 1px solid #ffffff;
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-            transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out;
-        }
-        .kanban-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
-            border-color: rgba(0,0,0,0.05);
-        }
-        .relief-button {
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-        }
-        .relief-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-        }
-        .relief-button:active {
-            transform: translateY(0px);
-        }
-
+        .relief-border { border: 1px solid #ffffff; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out; }
+        .kanban-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.05); }
+        .relief-button { transition: all 0.2s ease-in-out; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); }
+        .relief-button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); }
+        .relief-button:active { transform: translateY(0px); }
         /* --- Otros Estilos --- */
-        .kanban-column {
-            min-height: 400px;
-        }
-        .kanban-card {
-            cursor: grab;
-            position: relative;
-        }
-        .kanban-card:active {
-            cursor: grabbing;
-            transform: scale(1.05);
-        }
-        .dragging {
-            opacity: 0.5;
-            transform: rotate(3deg);
-        }
-        .drag-over {
-            background-color: #dbeafe;
-        }
-        .dark .drag-over {
-            background-color: #1e3a8a;
-        }
-        .delete-btn {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            opacity: 0.5;
-            transition: all 0.2s ease-in-out;
-        }
-        .kanban-card:hover .delete-btn {
-            opacity: 1;
-        }
-        .delete-btn:hover {
-            transform: scale(1.2);
-            color: #ef4444; /* red-500 */
-        }
-        input[type="color"] {
-        	-webkit-appearance: none;
-        	border: none;
-        	width: 40px;
-        	height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        input[type="color"]::-webkit-color-swatch-wrapper {
-        	padding: 0;
-        }
-        input[type="color"]::-webkit-color-swatch {
-        	border: 1px solid #4b5563;
-            border-radius: 50%;
-        }
+        .kanban-column { min-height: 400px; }
+        .kanban-card { position: relative; }
+        .kanban-card.editable { cursor: pointer; }
+        .kanban-card.draggable { cursor: grab; }
+        .kanban-card.draggable:active { cursor: grabbing; transform: scale(1.05); }
+        .dragging { opacity: 0.5; transform: rotate(3deg); }
+        .drag-over { background-color: #dbeafe; }
+        .dark .drag-over { background-color: #1e3a8a; }
+        .delete-btn { position: absolute; top: 8px; right: 8px; opacity: 0.5; transition: all 0.2s ease-in-out; }
+        .kanban-card:hover .delete-btn { opacity: 1; }
+        .delete-btn:hover { transform: scale(1.2); color: #ef4444; }
+        input[type="color"] { -webkit-appearance: none; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: 1px solid #4b5563; border-radius: 50%; }
+        /* Estilos para las pestañas de configuración */
+        .settings-tab { cursor: pointer; padding: 8px 16px; border-bottom: 2px solid transparent; }
+        .settings-tab.active { border-color: #4f46e5; color: #4f46e5; font-weight: 600; }
+        .dark .settings-tab.active { border-color: #818cf8; color: #818cf8; }
     </style>
 </head>
 <body class="text-gray-800">
-
     <!-- ENCABEZADO CON LOGO Y TÍTULO -->
     <div class="w-full bg-white dark:bg-gray-800 p-2 flex items-center justify-between relief-border main-header">
-        <img src="logo-poder-judicial.jpeg" alt="Logo Poder Judicial" style="width: 120px; height: auto;">
+        <img src="logo-poder-judicial.jpeg" alt="Logo Poder Judicial" style="width: 120px; height: auto;" onerror="this.style.display='none'">
         <h1 class="text-xl md:text-3xl font-bold text-center flex-grow text-gray-800 dark:text-white">Juzgado de Ejecución Penal N° 2</h1>
         <div style="width: 120px;" class="flex flex-col items-end pr-4">
             <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400">Estado de Conexión</h3>
             <div id="connection-status" class="flex items-center space-x-2 text-sm">
                 <span class="relative flex h-3 w-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
-                  <span id="connection-dot" class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span>
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-400 opacity-75"></span>
+                    <span id="connection-dot" class="relative inline-flex rounded-full h-3 w-3 bg-gray-500"></span>
                 </span>
                 <span id="connection-text">Conectando...</span>
             </div>
         </div>
     </div>
-
     <!-- Contenedor Principal -->
     <div class="container mx-auto p-4 md:p-6">
-
         <!-- Cabecera de controles -->
         <header class="flex flex-col md:flex-row justify-between items-center mb-6 mt-4">
             <div>
                 <h2 class="text-2xl font-bold">Monitor de Trámites de Beneficios</h2>
-                <p class="text-gray-500">Arrastra las tarjetas para actualizar el estado de los expedientes.</p>
+                <p id="header-subtitle" class="text-gray-500">Modo de solo lectura.</p>
             </div>
             <div class="flex items-center space-x-4 mt-4 md:mt-0">
                 <input type="text" id="searchInput" placeholder="Buscar por N° o Interno..." class="w-full md:w-64 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 relief-border">
-                
-                <!-- Botón de Configuración -->
                 <button id="settingsBtn" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none rounded-xl text-sm p-2.5 relief-button">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                 </button>
-
                 <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none rounded-xl text-sm p-2.5 relief-button">
-                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                 </button>
-
-                <button id="addCaseBtn" class="bg-indigo-600 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-indigo-700 relief-button">
+                <button id="addCaseBtn" class="bg-indigo-600 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-indigo-700 relief-button hidden">
                     + Nuevo Trámite
+                </button>
+                <button id="authBtn" class="bg-green-600 text-white font-bold py-2.5 px-5 rounded-xl hover:bg-green-700 relief-button">
+                    Iniciar Sesión
                 </button>
             </div>
         </header>
-
         <!-- Dashboard de Estadísticas -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief">
-                <h3 class="text-sm font-medium text-gray-500">Total Activos</h3>
-                <p id="total-activos" class="text-3xl font-bold">0</p>
-            </div>
-            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief">
-                <h3 class="text-sm font-medium text-gray-500">Tiempo Prom. en Gabinete</h3>
-                <p id="avg-time" class="text-3xl font-bold">N/A</p>
-            </div>
+            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Total Activos</h3><p id="total-activos" class="text-3xl font-bold">0</p></div>
+            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Tiempo Prom. en Gabinete</h3><p id="avg-time" class="text-3xl font-bold">N/A</p></div>
         </div>
-
         <!-- Loader -->
         <div id="loader" class="text-center py-10">
-            <svg class="animate-spin h-8 w-8 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+            <svg class="animate-spin h-8 w-8 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <p class="mt-2 text-gray-500">Cargando datos desde Google Sheets...</p>
         </div>
-
         <!-- Tablero Kanban -->
-        <div id="kanban-board" class="hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            <div class="bg-gray-100 rounded-xl p-4 kanban-column relief-border" data-status="Ingresado">
-                <h2 class="font-bold text-lg mb-4 flex justify-between items-center">Ingresados <span id="count-ingresado" class="text-sm bg-gray-300 text-gray-600 rounded-full px-2 py-0.5">0</span></h2>
-                <div class="space-y-4 card-container"></div>
-            </div>
-            <div class="bg-gray-100 rounded-xl p-4 kanban-column relief-border" data-status="En Gabinete">
-                <h2 class="font-bold text-lg mb-4 flex justify-between items-center">En Gabinete <span id="count-gabinete" class="text-sm bg-yellow-300 text-yellow-800 rounded-full px-2 py-0.5">0</span></h2>
-                <div class="space-y-4 card-container"></div>
-            </div>
-            <div class="bg-gray-100 rounded-xl p-4 kanban-column relief-border" data-status="Regreso">
-                <h2 class="font-bold text-lg mb-4 flex justify-between items-center">Regreso <span id="count-regreso" class="text-sm bg-cyan-300 text-cyan-800 rounded-full px-2 py-0.5">0</span></h2>
-                <div class="space-y-4 card-container"></div>
-            </div>
-            <div class="bg-gray-100 rounded-xl p-4 kanban-column relief-border" data-status="Para Despacho">
-                <h2 class="font-bold text-lg mb-4 flex justify-between items-center">Para Despacho <span id="count-despacho" class="text-sm bg-blue-300 text-blue-800 rounded-full px-2 py-0.5">0</span></h2>
-                <div class="space-y-4 card-container"></div>
-            </div>
-            <div class="bg-gray-100 rounded-xl p-4 kanban-column relief-border" data-status="Finalizado">
-                <h2 class="font-bold text-lg mb-4 flex justify-between items-center">Finalizados <span id="count-finalizado" class="text-sm bg-green-300 text-green-800 rounded-full px-2 py-0.5">0</span></h2>
-                <div class="space-y-4 card-container"></div>
-            </div>
-        </div>
+        <div id="kanban-board" class="hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
         
+        <!-- Gráfico de Beneficios -->
         <div id="chart-container" class="bg-white p-6 rounded-xl mt-6 hidden relief-border bg-white-relief">
              <h3 class="text-lg font-medium mb-4">Distribución de Beneficios Activos</h3>
-             <div class="relative h-80">
-                <canvas id="benefitsChart"></canvas>
-             </div>
+             <div class="relative h-80"><canvas id="benefitsChart"></canvas></div>
         </div>
-
     </div>
-
-    <!-- Modal para Nuevo Trámite -->
-    <div id="caseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
-        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 class="text-2xl font-bold mb-4">Agregar Nuevo Trámite</h2>
-            <form id="caseForm">
+    <!-- Modals -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 w-full max-w-sm transform transition-all dark:bg-gray-800 relief-border modal-content">
+            <h2 class="text-2xl font-bold mb-4">Acceso de Administrador</h2>
+            <form id="loginForm">
                 <div class="mb-4">
-                    <label for="expediente" class="block text-sm font-medium text-gray-700 dark:text-gray-300">N° de Expediente</label>
-                    <input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                    <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
                 </div>
-                <div class="mb-4">
-                    <label for="interno" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre del Interno/a</label>
-                    <input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-                <div class="mb-6">
-                    <label for="beneficio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Beneficio</label>
-                    <select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required>
-                        <option>Salidas Transitorias</option>
-                        <option>Prisión Domiciliaria</option>
-                        <option>Estímulo Educativo</option>
-                        <option>Libertad Asistida</option>
-                        <option>Libertad Condicional</option>
-                        <option>Régimen Preparatorio</option>
-                        <option>Otro</option>
-                    </select>
-                </div>
+                <p id="loginError" class="text-red-500 text-sm mb-4 hidden">Contraseña incorrecta.</p>
                 <div class="flex justify-end space-x-4">
-                    <button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
-                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar</button>
+                    <button type="button" id="cancelLoginBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Ingresar</button>
                 </div>
             </form>
         </div>
     </div>
+    <div id="caseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
+        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
+            <h2 id="modalTitle" class="text-2xl font-bold mb-4">Agregar Nuevo Trámite</h2>
+            <form id="caseForm">
+                <input type="hidden" id="caseId" name="caseId">
+                <div class="mb-4"><label for="expediente" class="block text-sm font-medium text-gray-700 dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-4"><label for="interno" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-6"><label for="beneficio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
+                <div class="flex justify-end space-x-4"><button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button><button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar</button></div>
+            </form>
+        </div>
+    </div>
     
-    <!-- Modal de Confirmación para Eliminar -->
     <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-30">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">¿Estás seguro de que deseas eliminar este beneficio? Esta acción no se puede deshacer.</p>
-            <div class="flex justify-end space-x-4">
-                <button type="button" id="cancelDeleteBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
-                <button type="button" id="confirmDeleteBtn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 relief-button">Eliminar</button>
-            </div>
+            <div class="flex justify-end space-x-4"><button type="button" id="cancelDeleteBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button><button type="button" id="confirmDeleteBtn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 relief-button">Eliminar</button></div>
         </div>
     </div>
-
-    <!-- Modal de Alerta -->
     <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-40">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 id="alertTitle" class="text-2xl font-bold mb-4 text-yellow-500">Alerta</h2>
             <p id="alertMessage" class="text-gray-600 dark:text-gray-300 mb-6"></p>
-            <div class="flex justify-end">
-                <button type="button" id="closeAlertBtn" class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-yellow-600 relief-button">Entendido</button>
-            </div>
+            <div class="flex justify-end"><button type="button" id="closeAlertBtn" class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-yellow-600 relief-button">Entendido</button></div>
         </div>
     </div>
     
-    <!-- Modal de Configuración de Colores -->
+    <!-- INICIO: MODAL DE CONFIGURACIÓN MODIFICADO -->
     <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 class="text-2xl font-bold mb-4">Configuración de Colores</h2>
-            <p class="text-sm text-gray-500 mb-6">Personaliza los colores de fondo para cada tipo de beneficio.</p>
-            <div id="color-settings-container" class="space-y-4">
-                <!-- Los colores se cargarán aquí dinámicamente -->
+            <h2 class="text-2xl font-bold mb-4">Configuración</h2>
+            
+            <!-- Pestañas de Navegación -->
+            <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+                <div id="colors-tab" class="settings-tab active">Colores</div>
+                <div id="password-tab" class="settings-tab">Seguridad</div>
             </div>
-            <div class="flex justify-between mt-8">
-                <button type="button" id="resetColorsBtn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-gray-600 relief-button">Restaurar</button>
-                <div class="space-x-4">
-                    <button type="button" id="cancelSettingsBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
-                    <button type="button" id="saveSettingsBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar</button>
+
+            <!-- Panel de Configuración de Colores -->
+            <div id="colors-panel">
+                <p class="text-sm text-gray-500 mb-6">Personaliza los colores de fondo para cada tipo de beneficio.</p>
+                <div id="color-settings-container" class="space-y-4 max-h-60 overflow-y-auto pr-2"></div>
+                <div class="flex justify-between mt-8">
+                    <button type="button" id="resetColorsBtn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-gray-600 relief-button">Restaurar</button>
+                    <button type="button" id="saveColorsBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Colores</button>
                 </div>
+            </div>
+
+            <!-- Panel de Cambio de Contraseña -->
+            <div id="password-panel" class="hidden">
+                 <p class="text-sm text-gray-500 mb-6">Para cambiar la contraseña de administrador, ingresa la actual y luego la nueva.</p>
+                 <form id="passwordChangeForm" class="space-y-4">
+                    <div>
+                        <label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña Actual</label>
+                        <input type="password" id="currentPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                    <div>
+                        <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nueva Contraseña</label>
+                        <input type="password" id="newPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirmar Nueva Contraseña</label>
+                        <input type="password" id="confirmPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                    </div>
+                    <div class="flex justify-end pt-4">
+                        <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Cambiar Contraseña</button>
+                    </div>
+                 </form>
+            </div>
+            
+            <!-- Botón de Cerrar/Cancelar general -->
+            <div class="flex justify-end mt-4">
+                <button type="button" id="cancelSettingsBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cerrar</button>
             </div>
         </div>
     </div>
+    <!-- FIN: MODAL DE CONFIGURACIÓN MODIFICADO -->
 
     <footer class="text-center py-8 mt-8 border-t border-gray-200 dark:border-gray-700">
         <p class="text-sm text-gray-500">By create RBM 2025</p>
     </footer>
-
     <script>
         // ----------- CONFIGURACIÓN -----------
-        const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbzl-GvlscpsIcPYn1pM7urV0D17-9pJnYmJwDNIGayGiLt-7Zq96KqGbtBP_0t_icKN/exec';
+        // CORRECCIÓN: Se restauró la URL de la Web App de Google.
+        const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbxQrKnu5rvSHSmHO7fPkLAfi6xQ4No--8YH_1IwcFV8CoB6da8um6aFWjnchqC-KDlg/exec'; // URL de tu script
+        const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
+        const KANBAN_COLUMNS = [
+            { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-600' },
+            { status: 'En Gabinete', color: 'bg-yellow-300', textColor: 'text-yellow-800' },
+            { status: 'Regreso', color: 'bg-cyan-300', textColor: 'text-cyan-800' },
+            { status: 'Para Despacho', color: 'bg-blue-300', textColor: 'text-blue-800' },
+            { status: 'Finalizado', color: 'bg-green-300', textColor: 'text-green-800' }
+        ];
         // -----------------------------------
-
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Selectores de Elementos ---
             const kanbanBoard = document.getElementById('kanban-board');
             const chartContainer = document.getElementById('chart-container');
             const loader = document.getElementById('loader');
@@ -336,234 +247,173 @@
             const settingsBtn = document.getElementById('settingsBtn');
             const settingsModal = document.getElementById('settingsModal');
             const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-            const resetColorsBtn = document.getElementById('resetColorsBtn');
-            const colorSettingsContainer = document.getElementById('color-settings-container');
-            
             const themeToggleBtn = document.getElementById('theme-toggle');
             const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
             const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            const authBtn = document.getElementById('authBtn');
+            const loginModal = document.getElementById('loginModal');
+            const loginForm = document.getElementById('loginForm');
+            const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+            const loginError = document.getElementById('loginError');
+            const headerSubtitle = document.getElementById('header-subtitle');
+            
+            // --- Selectores del Modal de Configuración (NUEVO) ---
+            const colorsTab = document.getElementById('colors-tab');
+            const passwordTab = document.getElementById('password-tab');
+            const colorsPanel = document.getElementById('colors-panel');
+            const passwordPanel = document.getElementById('password-panel');
+            const passwordChangeForm = document.getElementById('passwordChangeForm');
+            const saveColorsBtn = document.getElementById('saveColorsBtn');
+            const resetColorsBtn = document.getElementById('resetColorsBtn');
+            const colorSettingsContainer = document.getElementById('color-settings-container');
 
-            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-                themeToggleLightIcon.classList.remove('hidden');
-            } else {
-                document.documentElement.classList.remove('dark');
-                themeToggleDarkIcon.classList.remove('hidden');
-            }
-
-            themeToggleBtn.addEventListener('click', function() {
-                themeToggleDarkIcon.classList.toggle('hidden');
-                themeToggleLightIcon.classList.toggle('hidden');
-
-                if (localStorage.getItem('color-theme')) {
-                    if (localStorage.getItem('color-theme') === 'light') {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('color-theme', 'dark');
-                    } else {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('color-theme', 'light');
-                    }
-                } else {
-                    if (document.documentElement.classList.contains('dark')) {
-                        document.documentElement.classList.remove('dark');
-                        localStorage.setItem('color-theme', 'light');
-                    } else {
-                        document.documentElement.classList.add('dark');
-                        localStorage.setItem('color-theme', 'dark');
-                    }
-                }
-                updateDashboard(casesData);
-            });
-
+            // --- Estado de la Aplicación ---
             let casesData = [];
             let benefitsChart = null;
             let caseIdToDelete = null;
+            let isAuthenticated = false;
             
             const DEFAULT_BENEFIT_COLORS = {
-                'Salidas Transitorias': '#dbeafe',
-                'Prisión Domiciliaria': '#d1fae5',
-                'Estímulo Educativo': '#e9d5ff',
-                'Libertad Asistida': '#ccfbf1',
-                'Libertad Condicional': '#e0e7ff',
-                'Régimen Preparatorio': '#fce7f3',
+                'Salidas Transitorias': '#dbeafe', 'Prisión Domiciliaria': '#d1fae5',
+                'Estímulo Educativo': '#e9d5ff', 'Libertad Asistida': '#ccfbf1',
+                'Libertad Condicional': '#e0e7ff', 'Régimen Preparatorio': '#fce7f3',
                 'Otro': '#f3f4f6'
             };
             let benefitColors = { ...DEFAULT_BENEFIT_COLORS };
-
-            function loadColors() {
-                const savedColors = localStorage.getItem('benefitColors');
-                if (savedColors) {
-                    benefitColors = JSON.parse(savedColors);
-                } else {
-                    benefitColors = { ...DEFAULT_BENEFIT_COLORS };
-                }
-            }
             
-            function getContrastColor(hex) {
-                if (!hex) return '#000000';
-                const r = parseInt(hex.substr(1, 2), 16);
-                const g = parseInt(hex.substr(3, 2), 16);
-                const b = parseInt(hex.substr(5, 2), 16);
-                const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-                return (yiq >= 128) ? '#000000' : '#ffffff';
-            }
-
-            function showAlert(title, message) {
-                alertTitle.textContent = title;
-                alertMessage.textContent = message;
-                alertModal.style.display = 'flex';
-            }
-
-            closeAlertBtn.addEventListener('click', () => {
-                alertModal.style.display = 'none';
-            });
-
-            function setConnectionStatus(status, message) {
-                const dot = connectionStatusDot;
-                const text = connectionStatusText;
-                dot.classList.remove('bg-gray-500', 'bg-green-500', 'bg-red-500');
-                dot.parentElement.querySelector('.animate-ping')?.classList.add('hidden');
-
-                if (status === 'connected') {
-                    dot.classList.add('bg-green-500');
-                    text.textContent = message || 'Conectado';
-                } else if (status === 'error') {
-                    dot.classList.add('bg-red-500');
-                    text.textContent = message || 'Error';
+            // --- Funciones de Autenticación ---
+            function updateAuthStateUI() {
+                if (isAuthenticated) {
+                    addCaseBtn.classList.remove('hidden');
+                    authBtn.textContent = 'Cerrar Sesión';
+                    authBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    authBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                    headerSubtitle.textContent = 'Modo de edición activado. Arrastra las tarjetas para actualizar.';
                 } else {
-                    dot.classList.add('bg-gray-500');
-                    text.textContent = message || 'Conectando...';
+                    addCaseBtn.classList.add('hidden');
+                    authBtn.textContent = 'Iniciar Sesión';
+                    authBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    authBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+                    headerSubtitle.textContent = 'Modo de solo lectura.';
+                }
+                renderBoard(casesData); // Re-renderizar para aplicar/quitar clases de edición
+            }
+            function login(password) {
+                // MODIFICADO: Ahora comprueba la contraseña guardada en localStorage o la por defecto.
+                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
+                if (password === storedPassword) {
+                    isAuthenticated = true;
+                    sessionStorage.setItem('isAuthenticated', 'true');
+                    loginModal.style.display = 'none';
+                    loginForm.reset();
+                    loginError.classList.add('hidden');
+                    updateAuthStateUI();
+                } else {
+                    loginError.classList.remove('hidden');
                 }
             }
-
+            function logout() {
+                isAuthenticated = false;
+                sessionStorage.removeItem('isAuthenticated');
+                updateAuthStateUI();
+            }
+            // --- Funciones Principales ---
+            function initializeBoard() {
+                kanbanBoard.innerHTML = '';
+                KANBAN_COLUMNS.forEach(col => {
+                    const columnEl = document.createElement('div');
+                    columnEl.className = 'bg-gray-100 rounded-xl p-4 kanban-column relief-border';
+                    columnEl.dataset.status = col.status;
+                    columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
+                    kanbanBoard.appendChild(columnEl);
+                });
+            }
             async function fetchData() {
                 setConnectionStatus('connecting');
-                if (googleWebAppUrl === 'URL_DE_TU_GOOGLE_SCRIPT_AQUI' || !googleWebAppUrl) {
-                    loader.innerHTML = '<p class="text-red-500 font-bold">Error: Debes configurar la URL de Google Apps Script en el código.</p>';
-                    setConnectionStatus('error', 'URL no configurada');
-                    return;
-                }
                 loader.style.display = 'block';
                 kanbanBoard.style.display = 'none';
                 chartContainer.style.display = 'none';
-
                 try {
+                    // La URL vacía causaba el error. Ahora debería funcionar.
                     const response = await fetch(googleWebAppUrl);
-                    if (!response.ok) {
-                        throw new Error(`Error de Red (${response.status}): ${response.statusText}. Asegúrate de que el script esté implementado con acceso para 'Cualquier persona'.`);
-                    }
+                    if (!response.ok) throw new Error(`Error de Red (${response.status})`);
                     const data = await response.json();
-                    if (data.status === 'error') {
-                         throw new Error(`Error en el Script de Google: ${data.message}`);
-                    }
+                    if (data.status === 'error') throw new Error(`Error en Script: ${data.message}`);
                     casesData = data;
                     renderBoard(casesData);
                     updateDashboard(casesData);
                     setConnectionStatus('connected');
                 } catch (error) {
-                    console.error('Error detallado al obtener los datos:', error);
-                    loader.innerHTML = `<p class="text-red-500 font-bold">No se pudieron cargar los datos. <br> Sigue la guía de verificación para solucionarlo. <br><br> <span class="text-sm text-gray-400">Mensaje: ${error.message}</span></p>`;
+                    console.error('Error al obtener datos:', error);
+                    loader.innerHTML = `<p class="text-red-500 font-bold">No se pudieron cargar los datos.<br><span class="text-sm text-gray-400">Mensaje: ${error.message}</span></p>`;
                     setConnectionStatus('error', 'Fallo de conexión');
                 } finally {
-                    if (loader.innerHTML.includes('Error:')) {
-                        kanbanBoard.style.display = 'none';
-                    } else {
+                    if (!loader.innerHTML.includes('Error')) {
                         loader.style.display = 'none';
                         kanbanBoard.style.display = 'grid';
                         chartContainer.style.display = 'block';
                     }
                 }
             }
-
             function renderBoard(data) {
                 document.querySelectorAll('.card-container').forEach(c => c.innerHTML = '');
-                
-                document.getElementById('count-ingresado').textContent = '0';
-                document.getElementById('count-gabinete').textContent = '0';
-                document.getElementById('count-regreso').textContent = '0';
-                document.getElementById('count-despacho').textContent = '0';
-                document.getElementById('count-finalizado').textContent = '0';
-
+                KANBAN_COLUMNS.forEach(col => updateColumnCounter(col.status, 0, true));
                 if (Array.isArray(data)) {
                     data.forEach(caseItem => {
                         const card = createCardElement(caseItem);
                         const status = caseItem.estado ? String(caseItem.estado).trim() : null;
-                        
                         if (status) {
                             const columnContainer = kanbanBoard.querySelector(`.kanban-column[data-status="${status}"] .card-container`);
                             if (columnContainer) {
                                 columnContainer.appendChild(card);
                                 updateColumnCounter(status, 1);
-                            } else {
-                                console.warn(`Advertencia: No se encontró columna para el estado: "${status}"`);
                             }
                         }
                     });
                 }
-                setupDragAndDrop();
+                if (isAuthenticated) {
+                    setupDragAndDrop();
+                }
             }
-
             function createCardElement(caseItem) {
                 const card = document.createElement('div');
                 card.className = 'kanban-card p-4 rounded-xl relief-border';
-                card.draggable = true;
                 card.dataset.id = caseItem.id;
-
                 const bgColor = benefitColors[caseItem.beneficio] || benefitColors['Otro'];
                 const textColor = getContrastColor(bgColor);
-                
-                const fechaIngreso = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
-
+                const displayDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
                 card.innerHTML = `
-                    <button class="delete-btn text-gray-400 dark:text-gray-500" data-id="${caseItem.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                    <button class="delete-btn text-gray-400 dark:text-gray-500 ${isAuthenticated ? '' : 'hidden'}" data-id="${caseItem.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                     </button>
                     <div class="font-bold text-lg">${caseItem.expediente || 'S/N'}</div>
                     <div class="text-gray-600 text-sm mb-2 dark:text-gray-300">${caseItem.interno || 'S/N'}</div>
-                    <div class="benefit-tag text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full" style="background-color: ${bgColor}; color: ${textColor};">
-                        ${caseItem.beneficio || 'Otro'}
-                    </div>
-                    <div class="text-xs text-gray-400 mt-2">Ingreso: ${fechaIngreso}</div>
+                    <div class="benefit-tag text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full" style="background-color: ${bgColor}; color: ${textColor};">${caseItem.beneficio || 'Otro'}</div>
+                    <div class="text-xs text-gray-400 mt-2">Ingreso: ${displayDate}</div>
                 `;
                 
-                card.querySelector('.delete-btn').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    caseIdToDelete = e.currentTarget.dataset.id;
-                    deleteModal.style.display = 'flex';
-                });
-
+                if (isAuthenticated) {
+                    card.classList.add('editable', 'draggable');
+                    card.draggable = true;
+                    card.querySelector('.delete-btn').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        caseIdToDelete = e.currentTarget.dataset.id;
+                        deleteModal.style.display = 'flex';
+                    });
+                    card.addEventListener('click', () => openEditModal(caseItem.id));
+                }
                 return card;
             }
-
             function setupDragAndDrop() {
-                const cards = document.querySelectorAll('.kanban-card');
+                const cards = document.querySelectorAll('.draggable');
                 const columns = document.querySelectorAll('.kanban-column');
-
                 cards.forEach(card => {
-                    card.addEventListener('dragstart', () => {
-                        card.classList.add('dragging');
-                    });
-                    card.addEventListener('dragend', () => {
-                        card.classList.remove('dragging');
-                    });
+                    card.addEventListener('dragstart', () => card.classList.add('dragging'));
+                    card.addEventListener('dragend', () => card.classList.remove('dragging'));
                 });
-
                 columns.forEach(column => {
-                    column.addEventListener('dragover', e => {
-                        e.preventDefault();
-                        const draggingCard = document.querySelector('.dragging');
-                        if (draggingCard) {
-                            column.classList.add('drag-over');
-                        }
-                    });
-
-                    column.addEventListener('dragleave', () => {
-                        column.classList.remove('drag-over');
-                    });
-
+                    column.addEventListener('dragover', e => { e.preventDefault(); if (document.querySelector('.dragging')) column.classList.add('drag-over'); });
+                    column.addEventListener('dragleave', () => column.classList.remove('drag-over'));
                     column.addEventListener('drop', e => {
                         e.preventDefault();
                         column.classList.remove('drag-over');
@@ -572,7 +422,6 @@
                             const cardId = draggingCard.dataset.id;
                             const newStatus = column.dataset.status;
                             const oldStatus = draggingCard.closest('.kanban-column').dataset.status;
-
                             if (oldStatus !== newStatus) {
                                 column.querySelector('.card-container').appendChild(draggingCard);
                                 updateColumnCounter(oldStatus, -1);
@@ -583,31 +432,27 @@
                     });
                 });
             }
-            
             async function postData(payload) {
+                if (!isAuthenticated) {
+                    showAlert('Acción no permitida', 'Debes iniciar sesión para realizar cambios.');
+                    return;
+                }
+                // MODIFICADO: Ahora envía la contraseña actual (que podría haber sido cambiada).
+                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
                 try {
                     await fetch(googleWebAppUrl, {
-                        method: 'POST',
-                        body: JSON.stringify(payload),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        mode: 'no-cors',
+                        method: 'POST', body: JSON.stringify({...payload, password: storedPassword}),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, mode: 'no-cors',
                     });
                 } catch (error) {
-                    console.warn('Error esperado con no-cors (ignorar si la acción se completó):', error);
+                    console.warn('Error con no-cors (ignorar si la acción se completó):', error);
                     setConnectionStatus('error', 'Fallo al guardar');
                 }
             }
-
-            async function updateCaseStatus(id, newStatus) {
-                await postData({ action: 'updateStatus', id, newStatus });
-                setTimeout(fetchData, 500);
-            }
-
-            async function addNewCase(caseData) {
-                await postData({ action: 'addCase', ...caseData });
-                setTimeout(fetchData, 1500);
-            }
-
+            // --- Funciones de Actualización de Datos ---
+            async function updateCaseStatus(id, newStatus) { await postData({ action: 'updateStatus', id, newStatus }); setTimeout(fetchData, 500); }
+            async function addNewCase(caseData) { await postData({ action: 'addCase', ...caseData }); setTimeout(fetchData, 1500); }
+            async function updateCase(caseData) { await postData({ action: 'updateCase', ...caseData }); setTimeout(fetchData, 1500); }
             async function deleteCase(id) {
                 const cardElement = document.querySelector(`.kanban-card[data-id="${id}"]`);
                 if (cardElement) {
@@ -615,196 +460,207 @@
                     cardElement.remove();
                     updateColumnCounter(status, -1);
                 }
-                
                 casesData = casesData.filter(c => c.id !== id);
                 updateDashboard(casesData);
                 await postData({ action: 'deleteCase', id: id });
             }
-
+            // --- Funciones de UI y Utilidades ---
+            function openEditModal(caseId) {
+                const caseData = casesData.find(c => c.id === caseId);
+                if (!caseData) return;
+                document.getElementById('modalTitle').textContent = 'Editar Trámite';
+                caseForm.querySelector('#caseId').value = caseData.id;
+                caseForm.querySelector('#expediente').value = caseData.expediente || '';
+                caseForm.querySelector('#interno').value = caseData.interno || '';
+                caseForm.querySelector('#beneficio').value = caseData.beneficio || 'Otro';
+                if (caseData.fechaIngreso) {
+                    const date = new Date(caseData.fechaIngreso);
+                    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+                    caseForm.querySelector('#fechaIngreso').value = date.toISOString().split('T')[0];
+                } else {
+                    caseForm.querySelector('#fechaIngreso').value = '';
+                }
+                caseModal.style.display = 'flex';
+            }
             function updateDashboard(data) {
                 if (!Array.isArray(data)) return;
                 const activeCases = data.filter(c => c.estado !== 'Finalizado');
                 document.getElementById('total-activos').textContent = activeCases.length;
-
-                const casesInOrAfterGabinete = data.filter(c => c.fechaEnvioGabinete && c.fechaRegresoGabinete);
-                if(casesInOrAfterGabinete.length > 0) {
-                    const totalTime = casesInOrAfterGabinete.reduce((acc, c) => {
-                        const start = new Date(c.fechaEnvioGabinete);
-                        const end = new Date(c.fechaRegresoGabinete);
-                        if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
-                            const diffTime = Math.abs(end - start);
-                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                            return acc + diffDays;
-                        }
-                        return acc;
-                    }, 0);
-                    const avgDays = (totalTime / casesInOrAfterGabinete.length).toFixed(1);
-                    document.getElementById('avg-time').textContent = `${avgDays} días`;
+                const casesInGabinete = data.filter(c => c.fechaEnvioGabinete && c.fechaRegresoGabinete);
+                if(casesInGabinete.length > 0) {
+                    const totalTime = casesInGabinete.reduce((acc, c) => acc + (Math.abs(new Date(c.fechaRegresoGabinete) - new Date(c.fechaEnvioGabinete)) / (1000 * 60 * 60 * 24)), 0);
+                    document.getElementById('avg-time').textContent = `${(totalTime / casesInGabinete.length).toFixed(1)} días`;
                 } else {
                     document.getElementById('avg-time').textContent = 'N/A';
                 }
-
-                const benefitCounts = activeCases.reduce((acc, c) => {
-                    const benefit = c.beneficio || 'Otro';
-                    acc[benefit] = (acc[benefit] || 0) + 1;
-                    return acc;
-                }, {});
-
-                const chartLabels = Object.keys(benefitCounts);
-                const chartData = Object.values(benefitCounts);
-                
+                const benefitCounts = activeCases.reduce((acc, c) => { acc[c.beneficio || 'Otro'] = (acc[c.beneficio || 'Otro'] || 0) + 1; return acc; }, {});
                 const isDarkMode = document.documentElement.classList.contains('dark');
-                const legendColor = isDarkMode ? '#d1d5db' : '#4b5563';
-
-                if (benefitsChart) {
-                    benefitsChart.destroy();
-                }
-
-                const ctx = document.getElementById('benefitsChart').getContext('2d');
-                benefitsChart = new Chart(ctx, {
+                if (benefitsChart) benefitsChart.destroy();
+                benefitsChart = new Chart(document.getElementById('benefitsChart').getContext('2d'), {
                     type: 'pie',
                     data: {
-                        labels: chartLabels,
-                        datasets: [{
-                            label: 'Tipos de Beneficios',
-                            data: chartData,
-                            backgroundColor: chartLabels.map(label => benefitColors[label] || benefitColors['Otro']),
-                            borderColor: isDarkMode ? '#161b22' : '#eef2f9',
-                            borderWidth: 3
-                        }]
+                        labels: Object.keys(benefitCounts),
+                        datasets: [{ data: Object.values(benefitCounts), backgroundColor: Object.keys(benefitCounts).map(label => benefitColors[label] || benefitColors['Otro']), borderColor: isDarkMode ? '#161b22' : '#eef2f9', borderWidth: 3 }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'right',
-                                labels: {
-                                    color: legendColor
-                                }
-                            }
-                        }
-                    }
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: isDarkMode ? '#d1d5db' : '#4b5563' } } } }
                 });
             }
-
-            function updateColumnCounter(status, change) {
-                const counterIdMap = {
-                    'Ingresado': 'count-ingresado',
-                    'En Gabinete': 'count-gabinete',
-                    'Regreso': 'count-regreso',
-                    'Para Despacho': 'count-despacho',
-                    'Finalizado': 'count-finalizado'
-                };
-                const counterElement = document.getElementById(counterIdMap[status]);
+            function updateColumnCounter(status, change, reset = false) {
+                const counterId = `count-${status.toLowerCase().replace(/ /g, '-')}`;
+                const counterElement = document.getElementById(counterId);
                 if (counterElement) {
-                    let currentCount = parseInt(counterElement.textContent);
-                    counterElement.textContent = currentCount + change;
+                    counterElement.textContent = reset ? '0' : parseInt(counterElement.textContent) + change;
                 }
             }
-
-            addCaseBtn.addEventListener('click', () => {
-                caseModal.style.display = 'flex';
-            });
-
-            cancelBtn.addEventListener('click', () => {
-                caseModal.style.display = 'none';
-                caseForm.reset();
-            });
-
-            caseModal.addEventListener('click', (e) => {
-                if (e.target === caseModal) {
-                    caseModal.style.display = 'none';
-                    caseForm.reset();
+            // --- Event Listeners ---
+            authBtn.addEventListener('click', () => {
+                if (isAuthenticated) {
+                    logout();
+                } else {
+                    loginModal.style.display = 'flex';
                 }
             });
-
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const passwordInput = loginForm.querySelector('#password').value;
+                login(passwordInput);
+            });
+            cancelLoginBtn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                loginForm.reset();
+                loginError.classList.add('hidden');
+            });
+            addCaseBtn.addEventListener('click', () => { caseForm.reset(); document.getElementById('modalTitle').textContent = 'Agregar Nuevo Trámite'; document.getElementById('caseId').value = ''; caseModal.style.display = 'flex'; });
+            cancelBtn.addEventListener('click', () => caseModal.style.display = 'none');
+            caseModal.addEventListener('click', (e) => { if (e.target === caseModal) caseModal.style.display = 'none'; });
             caseForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const formData = new FormData(caseForm);
+                const caseId = formData.get('caseId');
                 const expedienteValue = formData.get('expediente').trim();
-
-                const isDuplicate = casesData.some(caseItem => caseItem.expediente === expedienteValue);
-                if (isDuplicate) {
-                    showAlert('Error: Expediente Duplicado', `El número de expediente "${expedienteValue}" ya existe en la base de datos.`);
-                    return; 
+                if (casesData.some(item => item.expediente === expedienteValue && item.id !== caseId)) {
+                    showAlert('Error: Expediente Duplicado', `El N° de expediente "${expedienteValue}" ya existe.`);
+                    return;
                 }
-
-                const newCase = {
-                    expediente: expedienteValue,
-                    interno: formData.get('interno'),
-                    beneficio: formData.get('beneficio')
-                };
-                addNewCase(newCase);
+                const dateParts = formData.get('fechaIngreso').split('-');
+                const localDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
+                const caseData = { expediente: expedienteValue, interno: formData.get('interno'), beneficio: formData.get('beneficio'), fechaIngreso: localDate.toISOString() };
+                if (caseId) { caseData.id = caseId; updateCase(caseData); } else { addNewCase(caseData); }
                 caseModal.style.display = 'none';
-                caseForm.reset();
             });
-
             searchInput.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
-                const filteredData = casesData.filter(c => {
-                    const expedienteMatch = c.expediente && typeof c.expediente === 'string' && c.expediente.toLowerCase().includes(searchTerm);
-                    const internoMatch = c.interno && typeof c.interno === 'string' && c.interno.toLowerCase().includes(searchTerm);
-                    return expedienteMatch || internoMatch;
-                });
+                const filteredData = casesData.filter(c => (c.expediente && c.expediente.toLowerCase().includes(searchTerm)) || (c.interno && c.interno.toLowerCase().includes(searchTerm)));
                 renderBoard(filteredData);
             });
-
-            cancelDeleteBtn.addEventListener('click', () => {
-                deleteModal.style.display = 'none';
-                caseIdToDelete = null;
-            });
-
-            confirmDeleteBtn.addEventListener('click', () => {
-                if (caseIdToDelete) {
-                    deleteCase(caseIdToDelete);
-                }
-                deleteModal.style.display = 'none';
-                caseIdToDelete = null;
-            });
+            cancelDeleteBtn.addEventListener('click', () => deleteModal.style.display = 'none');
+            confirmDeleteBtn.addEventListener('click', () => { if (caseIdToDelete) deleteCase(caseIdToDelete); deleteModal.style.display = 'none'; });
+            closeAlertBtn.addEventListener('click', () => alertModal.style.display = 'none');
             
-            // --- Lógica de Configuración de Colores ---
+            // --- Lógica de Tema y Colores ---
+            function toggleTheme() {
+                themeToggleDarkIcon.classList.toggle('hidden');
+                themeToggleLightIcon.classList.toggle('hidden');
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+                updateDashboard(casesData);
+            }
+            if ((localStorage.getItem('color-theme') === 'dark') || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                themeToggleLightIcon.classList.remove('hidden');
+                document.documentElement.classList.add('dark');
+            } else {
+                themeToggleDarkIcon.classList.remove('hidden');
+            }
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            function loadColors() { const savedColors = localStorage.getItem('benefitColors'); if (savedColors) benefitColors = JSON.parse(savedColors); }
+            
+            // --- INICIO: LÓGICA DEL MODAL DE CONFIGURACIÓN MODIFICADO ---
             settingsBtn.addEventListener('click', () => {
-                colorSettingsContainer.innerHTML = ''; // Limpiar
+                // Rellena el panel de colores
+                colorSettingsContainer.innerHTML = '';
                 for (const benefit in benefitColors) {
                     const div = document.createElement('div');
                     div.className = 'flex items-center justify-between';
-                    div.innerHTML = `
-                        <label for="color-${benefit}" class="text-gray-700 dark:text-gray-300">${benefit}</label>
-                        <input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">
-                    `;
+                    div.innerHTML = `<label for="color-${benefit}" class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
                     colorSettingsContainer.appendChild(div);
                 }
+                // Resetea a la pestaña de colores por defecto
+                colorsTab.click();
                 settingsModal.style.display = 'flex';
             });
-
-            cancelSettingsBtn.addEventListener('click', () => {
-                settingsModal.style.display = 'none';
-            });
             
-            resetColorsBtn.addEventListener('click', () => {
-                for (const benefit in DEFAULT_BENEFIT_COLORS) {
-                    document.getElementById(`color-${benefit}`).value = DEFAULT_BENEFIT_COLORS[benefit];
-                }
+            // Navegación por pestañas
+            colorsTab.addEventListener('click', () => {
+                colorsPanel.classList.remove('hidden');
+                passwordPanel.classList.add('hidden');
+                colorsTab.classList.add('active');
+                passwordTab.classList.remove('active');
+            });
+            passwordTab.addEventListener('click', () => {
+                passwordPanel.classList.remove('hidden');
+                colorsPanel.classList.add('hidden');
+                passwordTab.classList.add('active');
+                colorsTab.classList.remove('active');
             });
 
-            saveSettingsBtn.addEventListener('click', () => {
+            // Cerrar el modal
+            cancelSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
+            
+            // Lógica para guardar colores
+            resetColorsBtn.addEventListener('click', () => { for (const benefit in DEFAULT_BENEFIT_COLORS) document.getElementById(`color-${benefit}`).value = DEFAULT_BENEFIT_COLORS[benefit]; });
+            saveColorsBtn.addEventListener('click', () => {
                 const newColors = {};
-                for (const benefit in benefitColors) {
-                    const colorInput = document.getElementById(`color-${benefit}`);
-                    newColors[benefit] = colorInput.value;
-                }
+                for (const benefit in benefitColors) newColors[benefit] = document.getElementById(`color-${benefit}`).value;
                 benefitColors = newColors;
                 localStorage.setItem('benefitColors', JSON.stringify(benefitColors));
                 settingsModal.style.display = 'none';
-                renderBoard(casesData); // Re-renderizar todo para aplicar colores
+                renderBoard(casesData);
                 updateDashboard(casesData);
             });
 
+            // Lógica para cambiar la contraseña
+            passwordChangeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
+
+                if (currentPassword !== storedPassword) {
+                    showAlert('Error', 'La contraseña actual es incorrecta.');
+                    return;
+                }
+                if (!newPassword || newPassword.length < 4) {
+                    showAlert('Error', 'La nueva contraseña no puede estar vacía y debe tener al menos 4 caracteres.');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    showAlert('Error', 'Las nuevas contraseñas no coinciden.');
+                    return;
+                }
+                
+                // Guarda la nueva contraseña en el almacenamiento local del navegador
+                localStorage.setItem('adminPassword', newPassword);
+                showAlert('Éxito', 'La contraseña ha sido actualizada correctamente.');
+                passwordChangeForm.reset();
+                settingsModal.style.display = 'none';
+            });
+            // --- FIN: LÓGICA DEL MODAL DE CONFIGURACIÓN ---
+
+            // --- Funciones de Utilidad ---
+            function getContrastColor(hex) { if (!hex) return '#000000'; const r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16); return (((r * 299) + (g * 587) + (b * 114)) / 1000 >= 128) ? '#000000' : '#ffffff'; }
+            function setConnectionStatus(status, message) { const dot = connectionStatusDot, text = connectionStatusText; dot.className = 'relative inline-flex rounded-full h-3 w-3'; dot.parentElement.querySelector('.animate-ping')?.classList.add('hidden'); if (status === 'connected') { dot.classList.add('bg-green-500'); text.textContent = message || 'Conectado'; } else if (status === 'error') { dot.classList.add('bg-red-500'); text.textContent = message || 'Error'; } else { dot.classList.add('bg-gray-500'); text.textContent = message || 'Conectando...'; } }
+            function showAlert(title, message) { alertTitle.textContent = title; alertMessage.textContent = message; alertModal.style.display = 'flex'; }
+            // --- Inicialización ---
+            initializeBoard();
             loadColors();
+            if (sessionStorage.getItem('isAuthenticated') === 'true') {
+                isAuthenticated = true;
+            }
+            updateAuthStateUI();
             fetchData();
         });
     </script>
 </body>
-
 </html>

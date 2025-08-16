@@ -8,22 +8,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* --- Definición de Colores con Variables CSS --- */
+        :root {
+            --light-bg-general: #e5e7eb; /* gray-200 */
+            --light-bg-content: #ffffff; /* white */
+            --light-bg-column: #f9fafb; /* gray-50 */
+            --light-text-main: #111827; /* gray-900 */
+            --light-text-secondary: #374151; /* gray-700 */
+            --light-text-tertiary: #4b5563; /* gray-600 */
+
+            --dark-bg-general: #0d1117;
+            --dark-bg-content: #161b22;
+            --dark-border: #30363d;
+            --dark-card-bg: #21262d;
+            --dark-text-main: #f0f6fc;
+            --dark-text-secondary: #8b949e;
+            --dark-input-bg: #0d1117;
+        }
+
+        /* --- Paleta de Colores Modo Claro Mejorada --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef2f9;
+            background-color: var(--light-bg-general);
+            color: var(--light-text-main);
             transition: background-color 0.3s, color 0.3s;
         }
+        html:not(.dark) .main-header,
+        html:not(.dark) .bg-white-relief,
+        html:not(.dark) .modal-content {
+            background-color: var(--light-bg-content);
+        }
+        html:not(.dark) .kanban-column {
+            background-color: var(--light-bg-column);
+        }
+
         /* --- Estilos Modo Oscuro --- */
-        .dark body { background-color: #0d1117; color: #c9d1d9; }
-        .dark .main-header, .dark .bg-white-relief, .dark .kanban-column, .dark .modal-content { background-color: #161b22; border-color: #30363d; }
-        .dark .kanban-card { background-color: #21262d; border-color: #30363d; }
-        .dark header h2, .dark header p, .dark .kanban-column h2, .dark #chart-container h3 { color: #f0f6fc; }
-        .dark .text-gray-500 { color: #8b949e; }
-        .dark .text-gray-800 { color: #f0f6fc; }
-        .dark input, .dark select { background-color: #0d1117; border-color: #30363d; color: #c9d1d9; }
-        .dark input::placeholder { color: #8b949e; }
+        .dark body { background-color: var(--dark-bg-general); color: var(--dark-text-secondary); }
+        .dark .main-header, .dark .bg-white-relief, .dark .kanban-column, .dark .modal-content { background-color: var(--dark-bg-content); border-color: var(--dark-border); }
+        .dark .kanban-card { background-color: var(--dark-card-bg); border-color: var(--dark-border); }
+        .dark header h2, .dark header p, .dark .kanban-column h2, .dark #chart-container h3, .dark .text-gray-800 { color: var(--dark-text-main); }
+        .dark .text-gray-500 { color: var(--dark-text-secondary); }
+        .dark input, .dark select { background-color: var(--dark-input-bg); border-color: var(--dark-border); color: var(--dark-text-secondary); }
+        .dark input::placeholder { color: var(--dark-text-secondary); }
         .dark .kanban-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.25); border-color: rgba(255, 255, 255, 0.15); }
-        .dark .relief-button { background-color: #21262d; border-color: #30363d; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.2); }
+        .dark .relief-button { background-color: #21262d; border-color: var(--dark-border); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.2); }
         .dark .relief-button:hover { background-color: #30363d; }
         /* --- Estilos 3D / Relieve Moderno --- */
         .relief-border { border: 1px solid #ffffff; box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out, border-color 0.2s ease-in-out; }
@@ -50,13 +78,71 @@
         .settings-tab { cursor: pointer; padding: 8px 16px; border-bottom: 2px solid transparent; }
         .settings-tab.active { border-color: #4f46e5; color: #4f46e5; font-weight: 600; }
         .dark .settings-tab.active { border-color: #818cf8; color: #818cf8; }
+
+        /* --- Corrección de visibilidad en modo claro --- */
+        html:not(.dark) .text-gray-500 { color: var(--light-text-secondary); }
+        html:not(.dark) .text-gray-600 { color: var(--light-text-main); }
+        html:not(.dark) .text-gray-400 { color: var(--light-text-tertiary); }
+        
+        /* --- Estilos de Alarma --- */
+        @keyframes blinking-alarm {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { box-shadow: 0 0 10px 5px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        body.alarms-active .kanban-card.alarm {
+            animation: blinking-alarm 1.5s infinite;
+        }
+        /* Estilos para el interruptor de alarma */
+        .alarm-toggle-label {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .alarm-toggle-label input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .alarm-toggle-switch {
+            width: 44px;
+            height: 24px;
+            background-color: #ccc;
+            border-radius: 9999px;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        .alarm-toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+        .alarm-toggle-label input:checked + .alarm-toggle-switch {
+            background-color: #4ade80; /* green-400 */
+        }
+        .alarm-toggle-label input:checked + .alarm-toggle-switch::before {
+            transform: translateX(20px);
+        }
     </style>
 </head>
 <body class="text-gray-800">
     <!-- ENCABEZADO CON LOGO Y TÍTULO -->
     <div class="w-full bg-white dark:bg-gray-800 p-2 flex items-center justify-between relief-border main-header">
-        <img src="logo-poder-judicial.jpeg" alt="Logo Poder Judicial" style="width: 120px; height: auto;" onerror="this.style.display='none'">
-        <h1 class="text-xl md:text-3xl font-bold text-center flex-grow text-gray-800 dark:text-white">Juzgado de Ejecución Penal N° 2</h1>
+        <img src="https://i.imgur.com/YOUR_LOGO_ID.png" alt="Logo Poder Judicial" style="width: 120px; height: auto;" onerror="this.style.display='none'">
+        
+        <div class="flex-grow text-center">
+            <h1 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Juzgado de Ejecución Penal N° 2</h1>
+            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Monitor de Trámites de Beneficios</h2>
+            <p id="header-subtitle" class="text-sm text-gray-500">Modo de solo lectura.</p>
+        </div>
+
         <div style="width: 120px;" class="flex flex-col items-end pr-4">
             <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400">Estado de Conexión</h3>
             <div id="connection-status" class="flex items-center space-x-2 text-sm">
@@ -72,14 +158,23 @@
     <div class="container mx-auto p-4 md:p-6">
         <!-- Cabecera de controles -->
         <header class="flex flex-col md:flex-row justify-between items-center mb-6 mt-4">
-            <div>
-                <h2 class="text-2xl font-bold">Monitor de Trámites de Beneficios</h2>
-                <p id="header-subtitle" class="text-gray-500">Modo de solo lectura.</p>
-            </div>
+            <div class="flex-grow"></div> 
+
             <div class="flex items-center space-x-4 mt-4 md:mt-0">
                 <input type="text" id="searchInput" placeholder="Buscar por N° o Interno..." class="w-full md:w-64 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 relief-border">
+                
+                <div class="flex items-center space-x-2" title="Activar/Desactivar alarmas visuales">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zM9 13a1 1 0 112 0 1 1 0 01-2 0z" clip-rule="evenodd" />
+                    </svg>
+                    <label class="alarm-toggle-label">
+                        <input type="checkbox" id="alarmToggle">
+                        <span class="alarm-toggle-switch"></span>
+                    </label>
+                </div>
+
                 <button id="settingsBtn" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none rounded-xl text-sm p-2.5 relief-button">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379-1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                 </button>
                 <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none rounded-xl text-sm p-2.5 relief-button">
                     <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
@@ -143,6 +238,26 @@
         </div>
     </div>
     
+    <!-- Modal para editar fecha de estado -->
+    <div id="dateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
+        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
+            <h2 id="dateModalTitle" class="text-2xl font-bold mb-2">Actualizar Fecha de Estado</h2>
+            <p class="text-sm text-gray-500 mb-4">Expediente: <span id="dateModalExpediente" class="font-semibold"></span></p>
+            <form id="dateForm">
+                <input type="hidden" id="dateModalCaseId">
+                <input type="hidden" id="dateFieldToUpdate">
+                <div class="mb-6">
+                    <label id="stateDateLabel" for="stateDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</label>
+                    <input type="date" id="stateDate" name="stateDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="cancelDateBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Fecha</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-30">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
@@ -160,17 +275,47 @@
     
     <!-- INICIO: MODAL DE CONFIGURACIÓN MODIFICADO -->
     <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
-        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
+        <div class="bg-white rounded-xl p-8 w-full max-w-lg transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 class="text-2xl font-bold mb-4">Configuración</h2>
             
             <!-- Pestañas de Navegación -->
             <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
-                <div id="colors-tab" class="settings-tab active">Colores</div>
+                <div id="appearance-tab" class="settings-tab active">Apariencia</div>
+                <div id="colors-tab" class="settings-tab">Colores Tarjetas</div>
                 <div id="password-tab" class="settings-tab">Seguridad</div>
             </div>
 
-            <!-- Panel de Configuración de Colores -->
-            <div id="colors-panel">
+            <!-- Panel de Apariencia -->
+            <div id="appearance-panel">
+                <p class="text-sm text-gray-500 mb-6">Ajusta los colores principales de la interfaz para el modo claro y oscuro.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Columna Modo Claro -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Claro</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between"><label for="light-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="light-bg-general"></div>
+                            <div class="flex items-center justify-between"><label for="light-bg-content" class="text-gray-700 dark:text-gray-300">Fondo Contenido</label><input type="color" id="light-bg-content"></div>
+                            <div class="flex items-center justify-between"><label for="light-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="light-text-main"></div>
+                        </div>
+                    </div>
+                    <!-- Columna Modo Oscuro -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Oscuro</h3>
+                        <div class="space-y-4">
+                             <div class="flex items-center justify-between"><label for="dark-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="dark-bg-general"></div>
+                            <div class="flex items-center justify-between"><label for="dark-bg-content" class="text-gray-700 dark:text-gray-300">Fondo Contenido</label><input type="color" id="dark-bg-content"></div>
+                            <div class="flex items-center justify-between"><label for="dark-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="dark-text-main"></div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="flex justify-between mt-8">
+                    <button type="button" id="resetThemeBtn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-gray-600 relief-button">Restaurar por Defecto</button>
+                    <button type="button" id="saveThemeBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Apariencia</button>
+                </div>
+            </div>
+
+            <!-- Panel de Configuración de Colores de Tarjetas -->
+            <div id="colors-panel" class="hidden">
                 <p class="text-sm text-gray-500 mb-6">Personaliza los colores de fondo para cada tipo de beneficio.</p>
                 <div id="color-settings-container" class="space-y-4 max-h-60 overflow-y-auto pr-2"></div>
                 <div class="flex justify-between mt-8">
@@ -214,8 +359,7 @@
     </footer>
     <script>
         // ----------- CONFIGURACIÓN -----------
-        // CORRECCIÓN: Se restauró la URL de la Web App de Google.
-        const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbxQrKnu5rvSHSmHO7fPkLAfi6xQ4No--8YH_1IwcFV8CoB6da8um6aFWjnchqC-KDlg/exec'; // URL de tu script
+        const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbw3uIDQLJ0DZkFneywGn8m32QzFwx256JhNgVM1xL8g4LdUK90Lo82goFe559bpKLDV/exec'; // URL de tu script
         const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
         const KANBAN_COLUMNS = [
             { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-600' },
@@ -256,16 +400,32 @@
             const cancelLoginBtn = document.getElementById('cancelLoginBtn');
             const loginError = document.getElementById('loginError');
             const headerSubtitle = document.getElementById('header-subtitle');
+            const alarmToggle = document.getElementById('alarmToggle');
             
-            // --- Selectores del Modal de Configuración (NUEVO) ---
+            // --- Selectores del Modal de Fecha ---
+            const dateModal = document.getElementById('dateModal');
+            const dateModalTitle = document.getElementById('dateModalTitle');
+            const dateModalExpediente = document.getElementById('dateModalExpediente');
+            const dateForm = document.getElementById('dateForm');
+            const dateModalCaseId = document.getElementById('dateModalCaseId');
+            const dateFieldToUpdate = document.getElementById('dateFieldToUpdate');
+            const stateDateLabel = document.getElementById('stateDateLabel');
+            const stateDate = document.getElementById('stateDate');
+            const cancelDateBtn = document.getElementById('cancelDateBtn');
+
+            // --- Selectores del Modal de Configuración ---
+            const appearanceTab = document.getElementById('appearance-tab');
             const colorsTab = document.getElementById('colors-tab');
             const passwordTab = document.getElementById('password-tab');
+            const appearancePanel = document.getElementById('appearance-panel');
             const colorsPanel = document.getElementById('colors-panel');
             const passwordPanel = document.getElementById('password-panel');
             const passwordChangeForm = document.getElementById('passwordChangeForm');
             const saveColorsBtn = document.getElementById('saveColorsBtn');
             const resetColorsBtn = document.getElementById('resetColorsBtn');
             const colorSettingsContainer = document.getElementById('color-settings-container');
+            const saveThemeBtn = document.getElementById('saveThemeBtn');
+            const resetThemeBtn = document.getElementById('resetThemeBtn');
 
             // --- Estado de la Aplicación ---
             let casesData = [];
@@ -280,6 +440,11 @@
                 'Otro': '#f3f4f6'
             };
             let benefitColors = { ...DEFAULT_BENEFIT_COLORS };
+
+            const DEFAULT_THEME_COLORS = {
+                '--light-bg-general': '#e5e7eb', '--light-bg-content': '#ffffff', '--light-text-main': '#111827',
+                '--dark-bg-general': '#0d1117', '--dark-bg-content': '#161b22', '--dark-text-main': '#f0f6fc'
+            };
             
             // --- Funciones de Autenticación ---
             function updateAuthStateUI() {
@@ -296,10 +461,9 @@
                     authBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
                     headerSubtitle.textContent = 'Modo de solo lectura.';
                 }
-                renderBoard(casesData); // Re-renderizar para aplicar/quitar clases de edición
+                renderBoard(casesData);
             }
             function login(password) {
-                // MODIFICADO: Ahora comprueba la contraseña guardada en localStorage o la por defecto.
                 const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
                 if (password === storedPassword) {
                     isAuthenticated = true;
@@ -322,7 +486,7 @@
                 kanbanBoard.innerHTML = '';
                 KANBAN_COLUMNS.forEach(col => {
                     const columnEl = document.createElement('div');
-                    columnEl.className = 'bg-gray-100 rounded-xl p-4 kanban-column relief-border';
+                    columnEl.className = 'rounded-xl p-4 kanban-column relief-border';
                     columnEl.dataset.status = col.status;
                     columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
                     kanbanBoard.appendChild(columnEl);
@@ -334,7 +498,6 @@
                 kanbanBoard.style.display = 'none';
                 chartContainer.style.display = 'none';
                 try {
-                    // La URL vacía causaba el error. Ahora debería funcionar.
                     const response = await fetch(googleWebAppUrl);
                     if (!response.ok) throw new Error(`Error de Red (${response.status})`);
                     const data = await response.json();
@@ -382,6 +545,24 @@
                 const bgColor = benefitColors[caseItem.beneficio] || benefitColors['Otro'];
                 const textColor = getContrastColor(bgColor);
                 const displayDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
+
+                const statusDateMap = {
+                    'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
+                    'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
+                    'Para Despacho': { field: 'fechaDespacho', label: 'Despacho' },
+                    'Finalizado': { field: 'fechaFinalizado', label: 'Finalizado' }
+                };
+
+                let stateDateHTML = '';
+                const statusInfo = statusDateMap[caseItem.estado];
+                if (statusInfo) {
+                    const stateDateValue = caseItem[statusInfo.field];
+                    if (stateDateValue) {
+                        const displayStateDate = new Date(stateDateValue).toLocaleDateString();
+                        stateDateHTML = `<div class="mt-1">${statusInfo.label}: ${displayStateDate}</div>`;
+                    }
+                }
+
                 card.innerHTML = `
                     <button class="delete-btn text-gray-400 dark:text-gray-500 ${isAuthenticated ? '' : 'hidden'}" data-id="${caseItem.id}">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -389,8 +570,21 @@
                     <div class="font-bold text-lg">${caseItem.expediente || 'S/N'}</div>
                     <div class="text-gray-600 text-sm mb-2 dark:text-gray-300">${caseItem.interno || 'S/N'}</div>
                     <div class="benefit-tag text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full" style="background-color: ${bgColor}; color: ${textColor};">${caseItem.beneficio || 'Otro'}</div>
-                    <div class="text-xs text-gray-400 mt-2">Ingreso: ${displayDate}</div>
+                    <div class="text-xs text-gray-400 mt-2">
+                        <div>Ingreso: ${displayDate}</div>
+                        ${stateDateHTML}
+                    </div>
                 `;
+
+                if (caseItem.estado === 'En Gabinete' && caseItem.fechaEnvioGabinete) {
+                    const entryDate = new Date(caseItem.fechaEnvioGabinete);
+                    const today = new Date();
+                    const timeDiff = today.getTime() - entryDate.getTime();
+                    const daysInState = timeDiff / (1000 * 3600 * 24);
+                    if (daysInState > 7) {
+                        card.classList.add('alarm');
+                    }
+                }
                 
                 if (isAuthenticated) {
                     card.classList.add('editable', 'draggable');
@@ -400,7 +594,7 @@
                         caseIdToDelete = e.currentTarget.dataset.id;
                         deleteModal.style.display = 'flex';
                     });
-                    card.addEventListener('click', () => openEditModal(caseItem.id));
+                    card.addEventListener('click', () => openDateEditModal(caseItem));
                 }
                 return card;
             }
@@ -432,16 +626,16 @@
                     });
                 });
             }
+            
             async function postData(payload) {
                 if (!isAuthenticated) {
                     showAlert('Acción no permitida', 'Debes iniciar sesión para realizar cambios.');
                     return;
                 }
-                // MODIFICADO: Ahora envía la contraseña actual (que podría haber sido cambiada).
-                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
+                const serverPassword = PASSWORD; 
                 try {
                     await fetch(googleWebAppUrl, {
-                        method: 'POST', body: JSON.stringify({...payload, password: storedPassword}),
+                        method: 'POST', body: JSON.stringify({...payload, password: serverPassword}),
                         headers: { 'Content-Type': 'text/plain;charset=utf-8' }, mode: 'no-cors',
                     });
                 } catch (error) {
@@ -449,10 +643,17 @@
                     setConnectionStatus('error', 'Fallo al guardar');
                 }
             }
+
             // --- Funciones de Actualización de Datos ---
-            async function updateCaseStatus(id, newStatus) { await postData({ action: 'updateStatus', id, newStatus }); setTimeout(fetchData, 500); }
+            async function updateCaseStatus(id, newStatus) { await postData({ action: 'updateStatus', id, newStatus }); setTimeout(fetchData, 1500); }
             async function addNewCase(caseData) { await postData({ action: 'addCase', ...caseData }); setTimeout(fetchData, 1500); }
             async function updateCase(caseData) { await postData({ action: 'updateCase', ...caseData }); setTimeout(fetchData, 1500); }
+            
+            async function updateStateDate(payload) { 
+                await postData({ action: 'updateStateDate', ...payload }); 
+                setTimeout(fetchData, 1500); 
+            }
+
             async function deleteCase(id) {
                 const cardElement = document.querySelector(`.kanban-card[data-id="${id}"]`);
                 if (cardElement) {
@@ -465,23 +666,36 @@
                 await postData({ action: 'deleteCase', id: id });
             }
             // --- Funciones de UI y Utilidades ---
-            function openEditModal(caseId) {
-                const caseData = casesData.find(c => c.id === caseId);
-                if (!caseData) return;
-                document.getElementById('modalTitle').textContent = 'Editar Trámite';
-                caseForm.querySelector('#caseId').value = caseData.id;
-                caseForm.querySelector('#expediente').value = caseData.expediente || '';
-                caseForm.querySelector('#interno').value = caseData.interno || '';
-                caseForm.querySelector('#beneficio').value = caseData.beneficio || 'Otro';
-                if (caseData.fechaIngreso) {
-                    const date = new Date(caseData.fechaIngreso);
-                    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-                    caseForm.querySelector('#fechaIngreso').value = date.toISOString().split('T')[0];
-                } else {
-                    caseForm.querySelector('#fechaIngreso').value = '';
+            function openDateEditModal(caseItem) {
+                const statusMap = {
+                    'En Gabinete': { field: 'fechaEnvioGabinete', label: 'Fecha de Envío a Gabinete' },
+                    'Regreso': { field: 'fechaRegresoGabinete', label: 'Fecha de Regreso de Gabinete' },
+                    'Para Despacho': { field: 'fechaDespacho', label: 'Fecha para Despacho' },
+                    'Finalizado': { field: 'fechaFinalizado', label: 'Fecha de Finalización' }
+                };
+
+                const statusInfo = statusMap[caseItem.estado];
+                if (!statusInfo) {
+                    showAlert('No Editable', 'La fecha para este estado no se puede modificar desde aquí.');
+                    return;
                 }
-                caseModal.style.display = 'flex';
+
+                dateModalExpediente.textContent = caseItem.expediente || 'S/N';
+                dateModalCaseId.value = caseItem.id;
+                dateFieldToUpdate.value = statusInfo.field;
+                stateDateLabel.textContent = statusInfo.label;
+                
+                const currentDate = caseItem[statusInfo.field];
+                if (currentDate) {
+                    const date = new Date(currentDate);
+                    stateDate.value = date.toISOString().split('T')[0];
+                } else {
+                    stateDate.value = '';
+                }
+
+                dateModal.style.display = 'flex';
             }
+
             function updateDashboard(data) {
                 if (!Array.isArray(data)) return;
                 const activeCases = data.filter(c => c.estado !== 'Finalizado');
@@ -500,7 +714,7 @@
                     type: 'pie',
                     data: {
                         labels: Object.keys(benefitCounts),
-                        datasets: [{ data: Object.values(benefitCounts), backgroundColor: Object.keys(benefitCounts).map(label => benefitColors[label] || benefitColors['Otro']), borderColor: isDarkMode ? '#161b22' : '#eef2f9', borderWidth: 3 }]
+                        datasets: [{ data: Object.values(benefitCounts), backgroundColor: Object.keys(benefitCounts).map(label => benefitColors[label] || benefitColors['Otro']), borderColor: isDarkMode ? 'var(--dark-bg-general)' : 'var(--light-bg-general)', borderWidth: 3 }]
                     },
                     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: isDarkMode ? '#d1d5db' : '#4b5563' } } } }
                 });
@@ -522,8 +736,7 @@
             });
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const passwordInput = loginForm.querySelector('#password').value;
-                login(passwordInput);
+                login(loginForm.querySelector('#password').value);
             });
             cancelLoginBtn.addEventListener('click', () => {
                 loginModal.style.display = 'none';
@@ -542,12 +755,27 @@
                     showAlert('Error: Expediente Duplicado', `El N° de expediente "${expedienteValue}" ya existe.`);
                     return;
                 }
-                const dateParts = formData.get('fechaIngreso').split('-');
-                const localDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
-                const caseData = { expediente: expedienteValue, interno: formData.get('interno'), beneficio: formData.get('beneficio'), fechaIngreso: localDate.toISOString() };
-                if (caseId) { caseData.id = caseId; updateCase(caseData); } else { addNewCase(caseData); }
+                const caseData = { 
+                    expediente: expedienteValue, 
+                    interno: formData.get('interno'), 
+                    beneficio: formData.get('beneficio'), 
+                    fechaIngreso: formData.get('fechaIngreso') // Enviar como "YYYY-MM-DD"
+                };
+                if (caseId) { updateCase(caseData); } else { addNewCase(caseData); }
                 caseModal.style.display = 'none';
             });
+            dateForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const payload = {
+                    id: dateModalCaseId.value,
+                    dateField: dateFieldToUpdate.value,
+                    newDate: stateDate.value // Enviar como "YYYY-MM-DD"
+                };
+                updateStateDate(payload);
+                dateModal.style.display = 'none';
+            });
+            cancelDateBtn.addEventListener('click', () => dateModal.style.display = 'none');
+
             searchInput.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 const filteredData = casesData.filter(c => (c.expediente && c.expediente.toLowerCase().includes(searchTerm)) || (c.interno && c.interno.toLowerCase().includes(searchTerm)));
@@ -558,6 +786,17 @@
             closeAlertBtn.addEventListener('click', () => alertModal.style.display = 'none');
             
             // --- Lógica de Tema y Colores ---
+            function applyTheme(themeColors) {
+                for (const [key, value] of Object.entries(themeColors)) {
+                    document.documentElement.style.setProperty(key, value);
+                }
+            }
+            function loadCustomTheme() {
+                const savedTheme = localStorage.getItem('customThemeColors');
+                if (savedTheme) {
+                    applyTheme(JSON.parse(savedTheme));
+                }
+            }
             function toggleTheme() {
                 themeToggleDarkIcon.classList.toggle('hidden');
                 themeToggleLightIcon.classList.toggle('hidden');
@@ -574,39 +813,41 @@
             themeToggleBtn.addEventListener('click', toggleTheme);
             function loadColors() { const savedColors = localStorage.getItem('benefitColors'); if (savedColors) benefitColors = JSON.parse(savedColors); }
             
-            // --- INICIO: LÓGICA DEL MODAL DE CONFIGURACIÓN MODIFICADO ---
+            // --- LÓGICA DEL MODAL DE CONFIGURACIÓN ---
             settingsBtn.addEventListener('click', () => {
-                // Rellena el panel de colores
                 colorSettingsContainer.innerHTML = '';
                 for (const benefit in benefitColors) {
                     const div = document.createElement('div');
                     div.className = 'flex items-center justify-between';
-                    div.innerHTML = `<label for="color-${benefit}" class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
+                    div.innerHTML = `<label class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
                     colorSettingsContainer.appendChild(div);
                 }
-                // Resetea a la pestaña de colores por defecto
-                colorsTab.click();
+                
+                const currentTheme = JSON.parse(localStorage.getItem('customThemeColors')) || DEFAULT_THEME_COLORS;
+                document.getElementById('light-bg-general').value = currentTheme['--light-bg-general'];
+                document.getElementById('light-bg-content').value = currentTheme['--light-bg-content'];
+                document.getElementById('light-text-main').value = currentTheme['--light-text-main'];
+                document.getElementById('dark-bg-general').value = currentTheme['--dark-bg-general'];
+                document.getElementById('dark-bg-content').value = currentTheme['--dark-bg-content'];
+                document.getElementById('dark-text-main').value = currentTheme['--dark-text-main'];
+
+                appearanceTab.click();
                 settingsModal.style.display = 'flex';
             });
             
-            // Navegación por pestañas
-            colorsTab.addEventListener('click', () => {
-                colorsPanel.classList.remove('hidden');
-                passwordPanel.classList.add('hidden');
-                colorsTab.classList.add('active');
-                passwordTab.classList.remove('active');
-            });
-            passwordTab.addEventListener('click', () => {
-                passwordPanel.classList.remove('hidden');
-                colorsPanel.classList.add('hidden');
-                passwordTab.classList.add('active');
-                colorsTab.classList.remove('active');
+            const tabs = [appearanceTab, colorsTab, passwordTab];
+            const panels = [appearancePanel, colorsPanel, passwordPanel];
+            tabs.forEach((tab, index) => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.add('hidden'));
+                    tab.classList.add('active');
+                    panels[index].classList.remove('hidden');
+                });
             });
 
-            // Cerrar el modal
             cancelSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
             
-            // Lógica para guardar colores
             resetColorsBtn.addEventListener('click', () => { for (const benefit in DEFAULT_BENEFIT_COLORS) document.getElementById(`color-${benefit}`).value = DEFAULT_BENEFIT_COLORS[benefit]; });
             saveColorsBtn.addEventListener('click', () => {
                 const newColors = {};
@@ -618,41 +859,70 @@
                 updateDashboard(casesData);
             });
 
-            // Lógica para cambiar la contraseña
+            saveThemeBtn.addEventListener('click', () => {
+                const newTheme = {
+                    '--light-bg-general': document.getElementById('light-bg-general').value,
+                    '--light-bg-content': document.getElementById('light-bg-content').value,
+                    '--light-text-main': document.getElementById('light-text-main').value,
+                    '--dark-bg-general': document.getElementById('dark-bg-general').value,
+                    '--dark-bg-content': document.getElementById('dark-bg-content').value,
+                    '--dark-text-main': document.getElementById('dark-text-main').value
+                };
+                localStorage.setItem('customThemeColors', JSON.stringify(newTheme));
+                applyTheme(newTheme);
+                showAlert('Éxito', 'La apariencia ha sido guardada.');
+                settingsModal.style.display = 'none';
+            });
+            resetThemeBtn.addEventListener('click', () => {
+                localStorage.removeItem('customThemeColors');
+                applyTheme(DEFAULT_THEME_COLORS);
+                showAlert('Apariencia Restaurada', 'Se han restaurado los colores por defecto.');
+                settingsModal.style.display = 'none';
+            });
+
             passwordChangeForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const currentPassword = document.getElementById('currentPassword').value;
                 const newPassword = document.getElementById('newPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
-                
                 const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
 
                 if (currentPassword !== storedPassword) {
-                    showAlert('Error', 'La contraseña actual es incorrecta.');
-                    return;
+                    showAlert('Error', 'La contraseña actual es incorrecta.'); return;
                 }
                 if (!newPassword || newPassword.length < 4) {
-                    showAlert('Error', 'La nueva contraseña no puede estar vacía y debe tener al menos 4 caracteres.');
-                    return;
+                    showAlert('Error', 'La nueva contraseña debe tener al menos 4 caracteres.'); return;
                 }
                 if (newPassword !== confirmPassword) {
-                    showAlert('Error', 'Las nuevas contraseñas no coinciden.');
-                    return;
+                    showAlert('Error', 'Las nuevas contraseñas no coinciden.'); return;
                 }
                 
-                // Guarda la nueva contraseña en el almacenamiento local del navegador
                 localStorage.setItem('adminPassword', newPassword);
                 showAlert('Éxito', 'La contraseña ha sido actualizada correctamente.');
                 passwordChangeForm.reset();
                 settingsModal.style.display = 'none';
             });
-            // --- FIN: LÓGICA DEL MODAL DE CONFIGURACIÓN ---
+
+            function loadAlarmState() {
+                const alarmsEnabled = localStorage.getItem('alarmsEnabled') !== 'false';
+                alarmToggle.checked = alarmsEnabled;
+                document.body.classList.toggle('alarms-active', alarmsEnabled);
+            }
+            alarmToggle.addEventListener('change', () => {
+                const isEnabled = alarmToggle.checked;
+                localStorage.setItem('alarmsEnabled', isEnabled);
+                document.body.classList.toggle('alarms-active', isEnabled);
+            });
+
 
             // --- Funciones de Utilidad ---
             function getContrastColor(hex) { if (!hex) return '#000000'; const r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16); return (((r * 299) + (g * 587) + (b * 114)) / 1000 >= 128) ? '#000000' : '#ffffff'; }
             function setConnectionStatus(status, message) { const dot = connectionStatusDot, text = connectionStatusText; dot.className = 'relative inline-flex rounded-full h-3 w-3'; dot.parentElement.querySelector('.animate-ping')?.classList.add('hidden'); if (status === 'connected') { dot.classList.add('bg-green-500'); text.textContent = message || 'Conectado'; } else if (status === 'error') { dot.classList.add('bg-red-500'); text.textContent = message || 'Error'; } else { dot.classList.add('bg-gray-500'); text.textContent = message || 'Conectando...'; } }
             function showAlert(title, message) { alertTitle.textContent = title; alertMessage.textContent = message; alertModal.style.display = 'flex'; }
+            
             // --- Inicialización ---
+            loadCustomTheme();
+            loadAlarmState();
             initializeBoard();
             loadColors();
             if (sessionStorage.getItem('isAuthenticated') === 'true') {
@@ -664,3 +934,4 @@
     </script>
 </body>
 </html>
+>

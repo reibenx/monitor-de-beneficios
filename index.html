@@ -16,7 +16,6 @@
             --light-text-main: #111827; /* gray-900 */
             --light-text-secondary: #374151; /* gray-700 */
             --light-text-tertiary: #4b5563; /* gray-600 */
-
             --dark-bg-general: #0d1117;
             --dark-bg-content: #161b22;
             --dark-border: #30363d;
@@ -25,7 +24,6 @@
             --dark-text-secondary: #8b949e;
             --dark-input-bg: #0d1117;
         }
-
         /* --- Paleta de Colores Modo Claro Mejorada --- */
         body {
             font-family: 'Inter', sans-serif;
@@ -41,7 +39,6 @@
         html:not(.dark) .kanban-column {
             background-color: var(--light-bg-column);
         }
-
         /* --- Estilos Modo Oscuro --- */
         .dark body { background-color: var(--dark-bg-general); color: var(--dark-text-secondary); }
         .dark .main-header, .dark .bg-white-relief, .dark .kanban-column, .dark .modal-content { background-color: var(--dark-bg-content); border-color: var(--dark-border); }
@@ -78,12 +75,19 @@
         .settings-tab { cursor: pointer; padding: 8px 16px; border-bottom: 2px solid transparent; }
         .settings-tab.active { border-color: #4f46e5; color: #4f46e5; font-weight: 600; }
         .dark .settings-tab.active { border-color: #818cf8; color: #818cf8; }
+        
+        /* --- INICIO: Corrección de color de títulos en modo claro --- */
+        html:not(.dark) .main-header h1,
+        html:not(.dark) .main-header h2,
+        html:not(.dark) .main-header p#header-subtitle {
+            color: #000; /* Forzar negro en modo claro */
+        }
+        /* --- FIN: Corrección de color de títulos en modo claro --- */
 
         /* --- Corrección de visibilidad en modo claro --- */
         html:not(.dark) .text-gray-500 { color: var(--light-text-secondary); }
         html:not(.dark) .text-gray-600 { color: var(--light-text-main); }
         html:not(.dark) .text-gray-400 { color: var(--light-text-tertiary); }
-        
         /* --- Estilos de Alarma --- */
         @keyframes blinking-alarm {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
@@ -94,55 +98,24 @@
             animation: blinking-alarm 1.5s infinite;
         }
         /* Estilos para el interruptor de alarma */
-        .alarm-toggle-label {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        .alarm-toggle-label input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .alarm-toggle-switch {
-            width: 44px;
-            height: 24px;
-            background-color: #ccc;
-            border-radius: 9999px;
-            transition: background-color 0.2s;
-            position: relative;
-        }
-        .alarm-toggle-switch::before {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background-color: white;
-            top: 2px;
-            left: 2px;
-            transition: transform 0.2s;
-        }
-        .alarm-toggle-label input:checked + .alarm-toggle-switch {
-            background-color: #4ade80; /* green-400 */
-        }
-        .alarm-toggle-label input:checked + .alarm-toggle-switch::before {
-            transform: translateX(20px);
-        }
+        .alarm-toggle-label { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+        .alarm-toggle-label input { opacity: 0; width: 0; height: 0; }
+        .alarm-toggle-switch { width: 44px; height: 24px; background-color: #ccc; border-radius: 9999px; transition: background-color 0.2s; position: relative; }
+        .alarm-toggle-switch::before { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background-color: white; top: 2px; left: 2px; transition: transform 0.2s; }
+        .alarm-toggle-label input:checked + .alarm-toggle-switch { background-color: #4ade80; /* green-400 */ }
+        .alarm-toggle-label input:checked + .alarm-toggle-switch::before { transform: translateX(20px); }
     </style>
 </head>
 <body class="text-gray-800">
+
     <!-- ENCABEZADO CON LOGO Y TÍTULO -->
     <div class="w-full bg-white dark:bg-gray-800 p-2 flex items-center justify-between relief-border main-header">
         <img src="https://i.imgur.com/YOUR_LOGO_ID.png" alt="Logo Poder Judicial" style="width: 120px; height: auto;" onerror="this.style.display='none'">
-        
         <div class="flex-grow text-center">
-            <h1 class="text-xl md:text-3xl font-bold text-gray-800 dark:text-white">Juzgado de Ejecución Penal N° 2</h1>
-            <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Monitor de Trámites de Beneficios</h2>
-            <p id="header-subtitle" class="text-sm text-gray-500">Modo de solo lectura.</p>
+            <h1 class="text-xl md:text-3xl font-bold dark:text-white">Juzgado de Ejecución Penal N° 2</h1>
+            <h2 class="text-lg font-bold dark:text-gray-300">Monitor de Trámites de Beneficios</h2>
+            <p id="header-subtitle" class="text-sm font-bold dark:text-gray-400">Modo de solo lectura.</p>
         </div>
-
         <div style="width: 120px;" class="flex flex-col items-end pr-4">
             <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400">Estado de Conexión</h3>
             <div id="connection-status" class="flex items-center space-x-2 text-sm">
@@ -154,25 +127,23 @@
             </div>
         </div>
     </div>
+
     <!-- Contenedor Principal -->
     <div class="container mx-auto p-4 md:p-6">
         <!-- Cabecera de controles -->
         <header class="flex flex-col md:flex-row justify-between items-center mb-6 mt-4">
-            <div class="flex-grow"></div> 
-
+            <div class="flex-grow"></div>
             <div class="flex items-center space-x-4 mt-4 md:mt-0">
                 <input type="text" id="searchInput" placeholder="Buscar por N° o Interno..." class="w-full md:w-64 px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 relief-border">
-                
                 <div class="flex items-center space-x-2" title="Activar/Desactivar alarmas visuales">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zM9 13a1 1 0 112 0 1 1 0 01-2 0z" clip-rule="evenodd" />
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v4a1 1 0 102 0V7zM9 13a1 1 0 112 0 1 1 0 01-2 0z" clip-rule="evenodd" />
                     </svg>
                     <label class="alarm-toggle-label">
                         <input type="checkbox" id="alarmToggle">
                         <span class="alarm-toggle-switch"></span>
                     </label>
                 </div>
-
                 <button id="settingsBtn" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none rounded-xl text-sm p-2.5 relief-button">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734-2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379-1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                 </button>
@@ -188,25 +159,29 @@
                 </button>
             </div>
         </header>
+
         <!-- Dashboard de Estadísticas -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Total Activos</h3><p id="total-activos" class="text-3xl font-bold">0</p></div>
             <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Tiempo Prom. en Gabinete</h3><p id="avg-time" class="text-3xl font-bold">N/A</p></div>
         </div>
+
         <!-- Loader -->
         <div id="loader" class="text-center py-10">
             <svg class="animate-spin h-8 w-8 text-indigo-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
             <p class="mt-2 text-gray-500">Cargando datos desde Google Sheets...</p>
         </div>
+
         <!-- Tablero Kanban -->
         <div id="kanban-board" class="hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
-        
+
         <!-- Gráfico de Beneficios -->
         <div id="chart-container" class="bg-white p-6 rounded-xl mt-6 hidden relief-border bg-white-relief">
-             <h3 class="text-lg font-medium mb-4">Distribución de Beneficios Activos</h3>
-             <div class="relative h-80"><canvas id="benefitsChart"></canvas></div>
+            <h3 class="text-lg font-medium mb-4">Distribución de Beneficios Activos</h3>
+            <div class="relative h-80"><canvas id="benefitsChart"></canvas></div>
         </div>
     </div>
+
     <!-- Modals -->
     <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-8 w-full max-w-sm transform transition-all dark:bg-gray-800 relief-border modal-content">
@@ -224,6 +199,7 @@
             </form>
         </div>
     </div>
+
     <div id="caseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 id="modalTitle" class="text-2xl font-bold mb-4">Agregar Nuevo Trámite</h2>
@@ -232,27 +208,20 @@
                 <div class="mb-4"><label for="expediente" class="block text-sm font-medium text-gray-700 dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
                 <div class="mb-4"><label for="interno" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
                 <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-6"><label for="beneficio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
-                <div class="flex justify-end space-x-4"><button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button><button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar</button></div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Modal para editar fecha de estado -->
-    <div id="dateModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
-        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 id="dateModalTitle" class="text-2xl font-bold mb-2">Actualizar Fecha de Estado</h2>
-            <p class="text-sm text-gray-500 mb-4">Expediente: <span id="dateModalExpediente" class="font-semibold"></span></p>
-            <form id="dateForm">
-                <input type="hidden" id="dateModalCaseId">
-                <input type="hidden" id="dateFieldToUpdate">
-                <div class="mb-6">
-                    <label id="stateDateLabel" for="stateDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha</label>
-                    <input type="date" id="stateDate" name="stateDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                <div class="mb-4"><label for="beneficio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
+                
+                <!-- INICIO: Campo de fecha de estado dinámico -->
+                <div id="stateDateContainer" class="mb-6 hidden border-t pt-4 mt-4">
+                    <label id="stateDateEditLabel" for="stateDateEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Estado</label>
+                    <input type="date" id="stateDateEdit" name="stateDateEdit" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="hidden" id="stateDateField" name="stateDateField">
                 </div>
+                <!-- FIN: Campo de fecha de estado dinámico -->
+
                 <div class="flex justify-end space-x-4">
-                    <button type="button" id="cancelDateBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
-                    <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Fecha</button>
+                    <button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
+                    <!-- BOTÓN DE GUARDAR MODIFICADO -->
+                    <button type="submit" id="saveCaseBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button w-36 flex justify-center items-center">Guardar</button>
                 </div>
             </form>
         </div>
@@ -265,6 +234,7 @@
             <div class="flex justify-end space-x-4"><button type="button" id="cancelDeleteBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button><button type="button" id="confirmDeleteBtn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 relief-button">Eliminar</button></div>
         </div>
     </div>
+
     <div id="alertModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-40">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 id="alertTitle" class="text-2xl font-bold mb-4 text-yellow-500">Alerta</h2>
@@ -272,24 +242,19 @@
             <div class="flex justify-end"><button type="button" id="closeAlertBtn" class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-yellow-600 relief-button">Entendido</button></div>
         </div>
     </div>
-    
-    <!-- INICIO: MODAL DE CONFIGURACIÓN MODIFICADO -->
+
+    <!-- MODAL DE CONFIGURACIÓN -->
     <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-lg transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 class="text-2xl font-bold mb-4">Configuración</h2>
-            
-            <!-- Pestañas de Navegación -->
             <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
                 <div id="appearance-tab" class="settings-tab active">Apariencia</div>
                 <div id="colors-tab" class="settings-tab">Colores Tarjetas</div>
                 <div id="password-tab" class="settings-tab">Seguridad</div>
             </div>
-
-            <!-- Panel de Apariencia -->
             <div id="appearance-panel">
                 <p class="text-sm text-gray-500 mb-6">Ajusta los colores principales de la interfaz para el modo claro y oscuro.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Columna Modo Claro -->
                     <div>
                         <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Claro</h3>
                         <div class="space-y-4">
@@ -298,23 +263,20 @@
                             <div class="flex items-center justify-between"><label for="light-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="light-text-main"></div>
                         </div>
                     </div>
-                    <!-- Columna Modo Oscuro -->
                     <div>
                         <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Oscuro</h3>
                         <div class="space-y-4">
-                             <div class="flex items-center justify-between"><label for="dark-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="dark-bg-general"></div>
+                            <div class="flex items-center justify-between"><label for="dark-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="dark-bg-general"></div>
                             <div class="flex items-center justify-between"><label for="dark-bg-content" class="text-gray-700 dark:text-gray-300">Fondo Contenido</label><input type="color" id="dark-bg-content"></div>
                             <div class="flex items-center justify-between"><label for="dark-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="dark-text-main"></div>
                         </div>
                     </div>
                 </div>
-                 <div class="flex justify-between mt-8">
+                <div class="flex justify-between mt-8">
                     <button type="button" id="resetThemeBtn" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-xl hover:bg-gray-600 relief-button">Restaurar por Defecto</button>
                     <button type="button" id="saveThemeBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Apariencia</button>
                 </div>
             </div>
-
-            <!-- Panel de Configuración de Colores de Tarjetas -->
             <div id="colors-panel" class="hidden">
                 <p class="text-sm text-gray-500 mb-6">Personaliza los colores de fondo para cada tipo de beneficio.</p>
                 <div id="color-settings-container" class="space-y-4 max-h-60 overflow-y-auto pr-2"></div>
@@ -323,11 +285,9 @@
                     <button type="button" id="saveColorsBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Guardar Colores</button>
                 </div>
             </div>
-
-            <!-- Panel de Cambio de Contraseña -->
             <div id="password-panel" class="hidden">
-                 <p class="text-sm text-gray-500 mb-6">Para cambiar la contraseña de administrador, ingresa la actual y luego la nueva.</p>
-                 <form id="passwordChangeForm" class="space-y-4">
+                <p class="text-sm text-gray-500 mb-6">Para cambiar la contraseña de administrador, ingresa la actual y luego la nueva.</p>
+                <form id="passwordChangeForm" class="space-y-4">
                     <div>
                         <label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña Actual</label>
                         <input type="password" id="currentPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
@@ -343,595 +303,673 @@
                     <div class="flex justify-end pt-4">
                         <button type="submit" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button">Cambiar Contraseña</button>
                     </div>
-                 </form>
+                </form>
             </div>
-            
-            <!-- Botón de Cerrar/Cancelar general -->
             <div class="flex justify-end mt-4">
                 <button type="button" id="cancelSettingsBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cerrar</button>
             </div>
         </div>
     </div>
-    <!-- FIN: MODAL DE CONFIGURACIÓN MODIFICADO -->
-
+    
     <footer class="text-center py-8 mt-8 border-t border-gray-200 dark:border-gray-700">
         <p class="text-sm text-gray-500">By create RBM 2025</p>
     </footer>
-    <script>
-        // ----------- CONFIGURACIÓN -----------
-        const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbw3uIDQLJ0DZkFneywGn8m32QzFwx256JhNgVM1xL8g4LdUK90Lo82goFe559bpKLDV/exec'; // URL de tu script
-        const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
-        const KANBAN_COLUMNS = [
-            { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-600' },
-            { status: 'En Gabinete', color: 'bg-yellow-300', textColor: 'text-yellow-800' },
-            { status: 'Regreso', color: 'bg-cyan-300', textColor: 'text-cyan-800' },
-            { status: 'Para Despacho', color: 'bg-blue-300', textColor: 'text-blue-800' },
-            { status: 'Finalizado', color: 'bg-green-300', textColor: 'text-green-800' }
-        ];
-        // -----------------------------------
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Selectores de Elementos ---
-            const kanbanBoard = document.getElementById('kanban-board');
-            const chartContainer = document.getElementById('chart-container');
-            const loader = document.getElementById('loader');
-            const addCaseBtn = document.getElementById('addCaseBtn');
-            const caseModal = document.getElementById('caseModal');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const caseForm = document.getElementById('caseForm');
-            const searchInput = document.getElementById('searchInput');
-            const connectionStatusDot = document.getElementById('connection-dot');
-            const connectionStatusText = document.getElementById('connection-text');
-            const deleteModal = document.getElementById('deleteConfirmationModal');
-            const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-            const alertModal = document.getElementById('alertModal');
-            const alertTitle = document.getElementById('alertTitle');
-            const alertMessage = document.getElementById('alertMessage');
-            const closeAlertBtn = document.getElementById('closeAlertBtn');
-            const settingsBtn = document.getElementById('settingsBtn');
-            const settingsModal = document.getElementById('settingsModal');
-            const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
-            const themeToggleBtn = document.getElementById('theme-toggle');
-            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-            const authBtn = document.getElementById('authBtn');
-            const loginModal = document.getElementById('loginModal');
-            const loginForm = document.getElementById('loginForm');
-            const cancelLoginBtn = document.getElementById('cancelLoginBtn');
-            const loginError = document.getElementById('loginError');
-            const headerSubtitle = document.getElementById('header-subtitle');
-            const alarmToggle = document.getElementById('alarmToggle');
-            
-            // --- Selectores del Modal de Fecha ---
-            const dateModal = document.getElementById('dateModal');
-            const dateModalTitle = document.getElementById('dateModalTitle');
-            const dateModalExpediente = document.getElementById('dateModalExpediente');
-            const dateForm = document.getElementById('dateForm');
-            const dateModalCaseId = document.getElementById('dateModalCaseId');
-            const dateFieldToUpdate = document.getElementById('dateFieldToUpdate');
-            const stateDateLabel = document.getElementById('stateDateLabel');
-            const stateDate = document.getElementById('stateDate');
-            const cancelDateBtn = document.getElementById('cancelDateBtn');
 
-            // --- Selectores del Modal de Configuración ---
-            const appearanceTab = document.getElementById('appearance-tab');
-            const colorsTab = document.getElementById('colors-tab');
-            const passwordTab = document.getElementById('password-tab');
-            const appearancePanel = document.getElementById('appearance-panel');
-            const colorsPanel = document.getElementById('colors-panel');
-            const passwordPanel = document.getElementById('password-panel');
-            const passwordChangeForm = document.getElementById('passwordChangeForm');
-            const saveColorsBtn = document.getElementById('saveColorsBtn');
-            const resetColorsBtn = document.getElementById('resetColorsBtn');
-            const colorSettingsContainer = document.getElementById('color-settings-container');
-            const saveThemeBtn = document.getElementById('saveThemeBtn');
-            const resetThemeBtn = document.getElementById('resetThemeBtn');
+<script>
+// ----------- CONFIGURACIÓN -----------
+const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbw3uIDQLJ0DZkFneywGn8m32QzFwx256JhNgVM1xL8g4LdUK90Lo82goFe559bpKLDV/exec'; // URL de tu script
+const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
+const KANBAN_COLUMNS = [
+    { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-600' },
+    { status: 'En Gabinete', color: 'bg-yellow-300', textColor: 'text-yellow-800' },
+    { status: 'Regreso', color: 'bg-cyan-300', textColor: 'text-cyan-800' },
+    { status: 'Para Despacho', color: 'bg-blue-300', textColor: 'text-blue-800' },
+    { status: 'Finalizado', color: 'bg-green-300', textColor: 'text-green-800' }
+];
+// -----------------------------------
 
-            // --- Estado de la Aplicación ---
-            let casesData = [];
-            let benefitsChart = null;
-            let caseIdToDelete = null;
-            let isAuthenticated = false;
-            
-            const DEFAULT_BENEFIT_COLORS = {
-                'Salidas Transitorias': '#dbeafe', 'Prisión Domiciliaria': '#d1fae5',
-                'Estímulo Educativo': '#e9d5ff', 'Libertad Asistida': '#ccfbf1',
-                'Libertad Condicional': '#e0e7ff', 'Régimen Preparatorio': '#fce7f3',
-                'Otro': '#f3f4f6'
-            };
-            let benefitColors = { ...DEFAULT_BENEFIT_COLORS };
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Selectores de Elementos ---
+    const kanbanBoard = document.getElementById('kanban-board');
+    const chartContainer = document.getElementById('chart-container');
+    const loader = document.getElementById('loader');
+    const addCaseBtn = document.getElementById('addCaseBtn');
+    const caseModal = document.getElementById('caseModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const caseForm = document.getElementById('caseForm');
+    const searchInput = document.getElementById('searchInput');
+    const connectionStatusDot = document.getElementById('connection-dot');
+    const connectionStatusText = document.getElementById('connection-text');
+    const deleteModal = document.getElementById('deleteConfirmationModal');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const alertModal = document.getElementById('alertModal');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertMessage = document.getElementById('alertMessage');
+    const closeAlertBtn = document.getElementById('closeAlertBtn');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const cancelSettingsBtn = document.getElementById('cancelSettingsBtn');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const authBtn = document.getElementById('authBtn');
+    const loginModal = document.getElementById('loginModal');
+    const loginForm = document.getElementById('loginForm');
+    const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+    const loginError = document.getElementById('loginError');
+    const headerSubtitle = document.getElementById('header-subtitle');
+    const alarmToggle = document.getElementById('alarmToggle');
+    // --- Selectores del Modal de Edición ---
+    const stateDateContainer = document.getElementById('stateDateContainer');
+    const stateDateEditLabel = document.getElementById('stateDateEditLabel');
+    const stateDateEdit = document.getElementById('stateDateEdit');
+    const stateDateField = document.getElementById('stateDateField');
+    // --- Selectores del Modal de Configuración ---
+    const appearanceTab = document.getElementById('appearance-tab');
+    const colorsTab = document.getElementById('colors-tab');
+    const passwordTab = document.getElementById('password-tab');
+    const appearancePanel = document.getElementById('appearance-panel');
+    const colorsPanel = document.getElementById('colors-panel');
+    const passwordPanel = document.getElementById('password-panel');
+    const passwordChangeForm = document.getElementById('passwordChangeForm');
+    const saveColorsBtn = document.getElementById('saveColorsBtn');
+    const resetColorsBtn = document.getElementById('resetColorsBtn');
+    const colorSettingsContainer = document.getElementById('color-settings-container');
+    const saveThemeBtn = document.getElementById('saveThemeBtn');
+    const resetThemeBtn = document.getElementById('resetThemeBtn');
+    
+    // --- INICIO: Mejora de Controles de Fecha ---
+    // Establece la fecha máxima permitida en los inputs de fecha a "hoy".
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fechaIngreso').max = today;
+    document.getElementById('stateDateEdit').max = today;
+    // --- FIN: Mejora de Controles de Fecha ---
 
-            const DEFAULT_THEME_COLORS = {
-                '--light-bg-general': '#e5e7eb', '--light-bg-content': '#ffffff', '--light-text-main': '#111827',
-                '--dark-bg-general': '#0d1117', '--dark-bg-content': '#161b22', '--dark-text-main': '#f0f6fc'
-            };
-            
-            // --- Funciones de Autenticación ---
-            function updateAuthStateUI() {
-                if (isAuthenticated) {
-                    addCaseBtn.classList.remove('hidden');
-                    authBtn.textContent = 'Cerrar Sesión';
-                    authBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                    authBtn.classList.add('bg-red-600', 'hover:bg-red-700');
-                    headerSubtitle.textContent = 'Modo de edición activado. Arrastra las tarjetas para actualizar.';
-                } else {
-                    addCaseBtn.classList.add('hidden');
-                    authBtn.textContent = 'Iniciar Sesión';
-                    authBtn.classList.add('bg-green-600', 'hover:bg-green-700');
-                    authBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
-                    headerSubtitle.textContent = 'Modo de solo lectura.';
-                }
-                renderBoard(casesData);
-            }
-            function login(password) {
-                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
-                if (password === storedPassword) {
-                    isAuthenticated = true;
-                    sessionStorage.setItem('isAuthenticated', 'true');
-                    loginModal.style.display = 'none';
-                    loginForm.reset();
-                    loginError.classList.add('hidden');
-                    updateAuthStateUI();
-                } else {
-                    loginError.classList.remove('hidden');
-                }
-            }
-            function logout() {
-                isAuthenticated = false;
-                sessionStorage.removeItem('isAuthenticated');
-                updateAuthStateUI();
-            }
-            // --- Funciones Principales ---
-            function initializeBoard() {
-                kanbanBoard.innerHTML = '';
-                KANBAN_COLUMNS.forEach(col => {
-                    const columnEl = document.createElement('div');
-                    columnEl.className = 'rounded-xl p-4 kanban-column relief-border';
-                    columnEl.dataset.status = col.status;
-                    columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
-                    kanbanBoard.appendChild(columnEl);
-                });
-            }
-            async function fetchData() {
-                setConnectionStatus('connecting');
-                loader.style.display = 'block';
-                kanbanBoard.style.display = 'none';
-                chartContainer.style.display = 'none';
-                try {
-                    const response = await fetch(googleWebAppUrl);
-                    if (!response.ok) throw new Error(`Error de Red (${response.status})`);
-                    const data = await response.json();
-                    if (data.status === 'error') throw new Error(`Error en Script: ${data.message}`);
-                    casesData = data;
-                    renderBoard(casesData);
-                    updateDashboard(casesData);
-                    setConnectionStatus('connected');
-                } catch (error) {
-                    console.error('Error al obtener datos:', error);
-                    loader.innerHTML = `<p class="text-red-500 font-bold">No se pudieron cargar los datos.<br><span class="text-sm text-gray-400">Mensaje: ${error.message}</span></p>`;
-                    setConnectionStatus('error', 'Fallo de conexión');
-                } finally {
-                    if (!loader.innerHTML.includes('Error')) {
-                        loader.style.display = 'none';
-                        kanbanBoard.style.display = 'grid';
-                        chartContainer.style.display = 'block';
-                    }
-                }
-            }
-            function renderBoard(data) {
-                document.querySelectorAll('.card-container').forEach(c => c.innerHTML = '');
-                KANBAN_COLUMNS.forEach(col => updateColumnCounter(col.status, 0, true));
-                if (Array.isArray(data)) {
-                    data.forEach(caseItem => {
-                        const card = createCardElement(caseItem);
-                        const status = caseItem.estado ? String(caseItem.estado).trim() : null;
-                        if (status) {
-                            const columnContainer = kanbanBoard.querySelector(`.kanban-column[data-status="${status}"] .card-container`);
-                            if (columnContainer) {
-                                columnContainer.appendChild(card);
-                                updateColumnCounter(status, 1);
-                            }
-                        }
-                    });
-                }
-                if (isAuthenticated) {
-                    setupDragAndDrop();
-                }
-            }
-            function createCardElement(caseItem) {
-                const card = document.createElement('div');
-                card.className = 'kanban-card p-4 rounded-xl relief-border';
-                card.dataset.id = caseItem.id;
-                const bgColor = benefitColors[caseItem.beneficio] || benefitColors['Otro'];
-                const textColor = getContrastColor(bgColor);
-                const displayDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
+    // --- Estado de la Aplicación ---
+    let casesData = [];
+    let benefitsChart = null;
+    let caseIdToDelete = null;
+    let isAuthenticated = false;
 
-                const statusDateMap = {
-                    'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
-                    'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
-                    'Para Despacho': { field: 'fechaDespacho', label: 'Despacho' },
-                    'Finalizado': { field: 'fechaFinalizado', label: 'Finalizado' }
-                };
+    const DEFAULT_BENEFIT_COLORS = {
+        'Salidas Transitorias': '#dbeafe', 'Prisión Domiciliaria': '#d1fae5',
+        'Estímulo Educativo': '#e9d5ff', 'Libertad Asistida': '#ccfbf1',
+        'Libertad Condicional': '#e0e7ff', 'Régimen Preparatorio': '#fce7f3',
+        'Otro': '#f3f4f6'
+    };
+    let benefitColors = { ...DEFAULT_BENEFIT_COLORS };
+    const DEFAULT_THEME_COLORS = {
+        '--light-bg-general': '#e5e7eb', '--light-bg-content': '#ffffff', '--light-text-main': '#111827',
+        '--dark-bg-general': '#0d1117', '--dark-bg-content': '#161b22', '--dark-text-main': '#f0f6fc'
+    };
 
-                let stateDateHTML = '';
-                const statusInfo = statusDateMap[caseItem.estado];
-                if (statusInfo) {
-                    const stateDateValue = caseItem[statusInfo.field];
-                    if (stateDateValue) {
-                        const displayStateDate = new Date(stateDateValue).toLocaleDateString();
-                        stateDateHTML = `<div class="mt-1">${statusInfo.label}: ${displayStateDate}</div>`;
-                    }
-                }
+    // --- Funciones de Autenticación ---
+    function updateAuthStateUI() {
+        if (isAuthenticated) {
+            addCaseBtn.classList.remove('hidden');
+            authBtn.textContent = 'Cerrar Sesión';
+            authBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+            authBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+            headerSubtitle.textContent = 'Modo de edición activado. Arrastra las tarjetas para actualizar.';
+        } else {
+            addCaseBtn.classList.add('hidden');
+            authBtn.textContent = 'Iniciar Sesión';
+            authBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            authBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            headerSubtitle.textContent = 'Modo de solo lectura.';
+        }
+        renderBoard(casesData);
+    }
 
-                card.innerHTML = `
-                    <button class="delete-btn text-gray-400 dark:text-gray-500 ${isAuthenticated ? '' : 'hidden'}" data-id="${caseItem.id}">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                    </button>
-                    <div class="font-bold text-lg">${caseItem.expediente || 'S/N'}</div>
-                    <div class="text-gray-600 text-sm mb-2 dark:text-gray-300">${caseItem.interno || 'S/N'}</div>
-                    <div class="benefit-tag text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full" style="background-color: ${bgColor}; color: ${textColor};">${caseItem.beneficio || 'Otro'}</div>
-                    <div class="text-xs text-gray-400 mt-2">
-                        <div>Ingreso: ${displayDate}</div>
-                        ${stateDateHTML}
-                    </div>
-                `;
-
-                if (caseItem.estado === 'En Gabinete' && caseItem.fechaEnvioGabinete) {
-                    const entryDate = new Date(caseItem.fechaEnvioGabinete);
-                    const today = new Date();
-                    const timeDiff = today.getTime() - entryDate.getTime();
-                    const daysInState = timeDiff / (1000 * 3600 * 24);
-                    if (daysInState > 7) {
-                        card.classList.add('alarm');
-                    }
-                }
-                
-                if (isAuthenticated) {
-                    card.classList.add('editable', 'draggable');
-                    card.draggable = true;
-                    card.querySelector('.delete-btn').addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        caseIdToDelete = e.currentTarget.dataset.id;
-                        deleteModal.style.display = 'flex';
-                    });
-                    card.addEventListener('click', () => openDateEditModal(caseItem));
-                }
-                return card;
-            }
-            function setupDragAndDrop() {
-                const cards = document.querySelectorAll('.draggable');
-                const columns = document.querySelectorAll('.kanban-column');
-                cards.forEach(card => {
-                    card.addEventListener('dragstart', () => card.classList.add('dragging'));
-                    card.addEventListener('dragend', () => card.classList.remove('dragging'));
-                });
-                columns.forEach(column => {
-                    column.addEventListener('dragover', e => { e.preventDefault(); if (document.querySelector('.dragging')) column.classList.add('drag-over'); });
-                    column.addEventListener('dragleave', () => column.classList.remove('drag-over'));
-                    column.addEventListener('drop', e => {
-                        e.preventDefault();
-                        column.classList.remove('drag-over');
-                        const draggingCard = document.querySelector('.dragging');
-                        if (draggingCard) {
-                            const cardId = draggingCard.dataset.id;
-                            const newStatus = column.dataset.status;
-                            const oldStatus = draggingCard.closest('.kanban-column').dataset.status;
-                            if (oldStatus !== newStatus) {
-                                column.querySelector('.card-container').appendChild(draggingCard);
-                                updateColumnCounter(oldStatus, -1);
-                                updateColumnCounter(newStatus, 1);
-                                updateCaseStatus(cardId, newStatus);
-                            }
-                        }
-                    });
-                });
-            }
-            
-            async function postData(payload) {
-                if (!isAuthenticated) {
-                    showAlert('Acción no permitida', 'Debes iniciar sesión para realizar cambios.');
-                    return;
-                }
-                const serverPassword = PASSWORD; 
-                try {
-                    await fetch(googleWebAppUrl, {
-                        method: 'POST', body: JSON.stringify({...payload, password: serverPassword}),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, mode: 'no-cors',
-                    });
-                } catch (error) {
-                    console.warn('Error con no-cors (ignorar si la acción se completó):', error);
-                    setConnectionStatus('error', 'Fallo al guardar');
-                }
-            }
-
-            // --- Funciones de Actualización de Datos ---
-            async function updateCaseStatus(id, newStatus) { await postData({ action: 'updateStatus', id, newStatus }); setTimeout(fetchData, 1500); }
-            async function addNewCase(caseData) { await postData({ action: 'addCase', ...caseData }); setTimeout(fetchData, 1500); }
-            async function updateCase(caseData) { await postData({ action: 'updateCase', ...caseData }); setTimeout(fetchData, 1500); }
-            
-            async function updateStateDate(payload) { 
-                await postData({ action: 'updateStateDate', ...payload }); 
-                setTimeout(fetchData, 1500); 
-            }
-
-            async function deleteCase(id) {
-                const cardElement = document.querySelector(`.kanban-card[data-id="${id}"]`);
-                if (cardElement) {
-                    const status = cardElement.closest('.kanban-column').dataset.status;
-                    cardElement.remove();
-                    updateColumnCounter(status, -1);
-                }
-                casesData = casesData.filter(c => c.id !== id);
-                updateDashboard(casesData);
-                await postData({ action: 'deleteCase', id: id });
-            }
-            // --- Funciones de UI y Utilidades ---
-            function openDateEditModal(caseItem) {
-                const statusMap = {
-                    'En Gabinete': { field: 'fechaEnvioGabinete', label: 'Fecha de Envío a Gabinete' },
-                    'Regreso': { field: 'fechaRegresoGabinete', label: 'Fecha de Regreso de Gabinete' },
-                    'Para Despacho': { field: 'fechaDespacho', label: 'Fecha para Despacho' },
-                    'Finalizado': { field: 'fechaFinalizado', label: 'Fecha de Finalización' }
-                };
-
-                const statusInfo = statusMap[caseItem.estado];
-                if (!statusInfo) {
-                    showAlert('No Editable', 'La fecha para este estado no se puede modificar desde aquí.');
-                    return;
-                }
-
-                dateModalExpediente.textContent = caseItem.expediente || 'S/N';
-                dateModalCaseId.value = caseItem.id;
-                dateFieldToUpdate.value = statusInfo.field;
-                stateDateLabel.textContent = statusInfo.label;
-                
-                const currentDate = caseItem[statusInfo.field];
-                if (currentDate) {
-                    const date = new Date(currentDate);
-                    stateDate.value = date.toISOString().split('T')[0];
-                } else {
-                    stateDate.value = '';
-                }
-
-                dateModal.style.display = 'flex';
-            }
-
-            function updateDashboard(data) {
-                if (!Array.isArray(data)) return;
-                const activeCases = data.filter(c => c.estado !== 'Finalizado');
-                document.getElementById('total-activos').textContent = activeCases.length;
-                const casesInGabinete = data.filter(c => c.fechaEnvioGabinete && c.fechaRegresoGabinete);
-                if(casesInGabinete.length > 0) {
-                    const totalTime = casesInGabinete.reduce((acc, c) => acc + (Math.abs(new Date(c.fechaRegresoGabinete) - new Date(c.fechaEnvioGabinete)) / (1000 * 60 * 60 * 24)), 0);
-                    document.getElementById('avg-time').textContent = `${(totalTime / casesInGabinete.length).toFixed(1)} días`;
-                } else {
-                    document.getElementById('avg-time').textContent = 'N/A';
-                }
-                const benefitCounts = activeCases.reduce((acc, c) => { acc[c.beneficio || 'Otro'] = (acc[c.beneficio || 'Otro'] || 0) + 1; return acc; }, {});
-                const isDarkMode = document.documentElement.classList.contains('dark');
-                if (benefitsChart) benefitsChart.destroy();
-                benefitsChart = new Chart(document.getElementById('benefitsChart').getContext('2d'), {
-                    type: 'pie',
-                    data: {
-                        labels: Object.keys(benefitCounts),
-                        datasets: [{ data: Object.values(benefitCounts), backgroundColor: Object.keys(benefitCounts).map(label => benefitColors[label] || benefitColors['Otro']), borderColor: isDarkMode ? 'var(--dark-bg-general)' : 'var(--light-bg-general)', borderWidth: 3 }]
-                    },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: isDarkMode ? '#d1d5db' : '#4b5563' } } } }
-                });
-            }
-            function updateColumnCounter(status, change, reset = false) {
-                const counterId = `count-${status.toLowerCase().replace(/ /g, '-')}`;
-                const counterElement = document.getElementById(counterId);
-                if (counterElement) {
-                    counterElement.textContent = reset ? '0' : parseInt(counterElement.textContent) + change;
-                }
-            }
-            // --- Event Listeners ---
-            authBtn.addEventListener('click', () => {
-                if (isAuthenticated) {
-                    logout();
-                } else {
-                    loginModal.style.display = 'flex';
-                }
-            });
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                login(loginForm.querySelector('#password').value);
-            });
-            cancelLoginBtn.addEventListener('click', () => {
-                loginModal.style.display = 'none';
-                loginForm.reset();
-                loginError.classList.add('hidden');
-            });
-            addCaseBtn.addEventListener('click', () => { caseForm.reset(); document.getElementById('modalTitle').textContent = 'Agregar Nuevo Trámite'; document.getElementById('caseId').value = ''; caseModal.style.display = 'flex'; });
-            cancelBtn.addEventListener('click', () => caseModal.style.display = 'none');
-            caseModal.addEventListener('click', (e) => { if (e.target === caseModal) caseModal.style.display = 'none'; });
-            caseForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(caseForm);
-                const caseId = formData.get('caseId');
-                const expedienteValue = formData.get('expediente').trim();
-                if (casesData.some(item => item.expediente === expedienteValue && item.id !== caseId)) {
-                    showAlert('Error: Expediente Duplicado', `El N° de expediente "${expedienteValue}" ya existe.`);
-                    return;
-                }
-                const caseData = { 
-                    expediente: expedienteValue, 
-                    interno: formData.get('interno'), 
-                    beneficio: formData.get('beneficio'), 
-                    fechaIngreso: formData.get('fechaIngreso') // Enviar como "YYYY-MM-DD"
-                };
-                if (caseId) { updateCase(caseData); } else { addNewCase(caseData); }
-                caseModal.style.display = 'none';
-            });
-            dateForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const payload = {
-                    id: dateModalCaseId.value,
-                    dateField: dateFieldToUpdate.value,
-                    newDate: stateDate.value // Enviar como "YYYY-MM-DD"
-                };
-                updateStateDate(payload);
-                dateModal.style.display = 'none';
-            });
-            cancelDateBtn.addEventListener('click', () => dateModal.style.display = 'none');
-
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const filteredData = casesData.filter(c => (c.expediente && c.expediente.toLowerCase().includes(searchTerm)) || (c.interno && c.interno.toLowerCase().includes(searchTerm)));
-                renderBoard(filteredData);
-            });
-            cancelDeleteBtn.addEventListener('click', () => deleteModal.style.display = 'none');
-            confirmDeleteBtn.addEventListener('click', () => { if (caseIdToDelete) deleteCase(caseIdToDelete); deleteModal.style.display = 'none'; });
-            closeAlertBtn.addEventListener('click', () => alertModal.style.display = 'none');
-            
-            // --- Lógica de Tema y Colores ---
-            function applyTheme(themeColors) {
-                for (const [key, value] of Object.entries(themeColors)) {
-                    document.documentElement.style.setProperty(key, value);
-                }
-            }
-            function loadCustomTheme() {
-                const savedTheme = localStorage.getItem('customThemeColors');
-                if (savedTheme) {
-                    applyTheme(JSON.parse(savedTheme));
-                }
-            }
-            function toggleTheme() {
-                themeToggleDarkIcon.classList.toggle('hidden');
-                themeToggleLightIcon.classList.toggle('hidden');
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
-                updateDashboard(casesData);
-            }
-            if ((localStorage.getItem('color-theme') === 'dark') || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                themeToggleLightIcon.classList.remove('hidden');
-                document.documentElement.classList.add('dark');
-            } else {
-                themeToggleDarkIcon.classList.remove('hidden');
-            }
-            themeToggleBtn.addEventListener('click', toggleTheme);
-            function loadColors() { const savedColors = localStorage.getItem('benefitColors'); if (savedColors) benefitColors = JSON.parse(savedColors); }
-            
-            // --- LÓGICA DEL MODAL DE CONFIGURACIÓN ---
-            settingsBtn.addEventListener('click', () => {
-                colorSettingsContainer.innerHTML = '';
-                for (const benefit in benefitColors) {
-                    const div = document.createElement('div');
-                    div.className = 'flex items-center justify-between';
-                    div.innerHTML = `<label class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
-                    colorSettingsContainer.appendChild(div);
-                }
-                
-                const currentTheme = JSON.parse(localStorage.getItem('customThemeColors')) || DEFAULT_THEME_COLORS;
-                document.getElementById('light-bg-general').value = currentTheme['--light-bg-general'];
-                document.getElementById('light-bg-content').value = currentTheme['--light-bg-content'];
-                document.getElementById('light-text-main').value = currentTheme['--light-text-main'];
-                document.getElementById('dark-bg-general').value = currentTheme['--dark-bg-general'];
-                document.getElementById('dark-bg-content').value = currentTheme['--dark-bg-content'];
-                document.getElementById('dark-text-main').value = currentTheme['--dark-text-main'];
-
-                appearanceTab.click();
-                settingsModal.style.display = 'flex';
-            });
-            
-            const tabs = [appearanceTab, colorsTab, passwordTab];
-            const panels = [appearancePanel, colorsPanel, passwordPanel];
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    panels.forEach(p => p.classList.add('hidden'));
-                    tab.classList.add('active');
-                    panels[index].classList.remove('hidden');
-                });
-            });
-
-            cancelSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
-            
-            resetColorsBtn.addEventListener('click', () => { for (const benefit in DEFAULT_BENEFIT_COLORS) document.getElementById(`color-${benefit}`).value = DEFAULT_BENEFIT_COLORS[benefit]; });
-            saveColorsBtn.addEventListener('click', () => {
-                const newColors = {};
-                for (const benefit in benefitColors) newColors[benefit] = document.getElementById(`color-${benefit}`).value;
-                benefitColors = newColors;
-                localStorage.setItem('benefitColors', JSON.stringify(benefitColors));
-                settingsModal.style.display = 'none';
-                renderBoard(casesData);
-                updateDashboard(casesData);
-            });
-
-            saveThemeBtn.addEventListener('click', () => {
-                const newTheme = {
-                    '--light-bg-general': document.getElementById('light-bg-general').value,
-                    '--light-bg-content': document.getElementById('light-bg-content').value,
-                    '--light-text-main': document.getElementById('light-text-main').value,
-                    '--dark-bg-general': document.getElementById('dark-bg-general').value,
-                    '--dark-bg-content': document.getElementById('dark-bg-content').value,
-                    '--dark-text-main': document.getElementById('dark-text-main').value
-                };
-                localStorage.setItem('customThemeColors', JSON.stringify(newTheme));
-                applyTheme(newTheme);
-                showAlert('Éxito', 'La apariencia ha sido guardada.');
-                settingsModal.style.display = 'none';
-            });
-            resetThemeBtn.addEventListener('click', () => {
-                localStorage.removeItem('customThemeColors');
-                applyTheme(DEFAULT_THEME_COLORS);
-                showAlert('Apariencia Restaurada', 'Se han restaurado los colores por defecto.');
-                settingsModal.style.display = 'none';
-            });
-
-            passwordChangeForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const currentPassword = document.getElementById('currentPassword').value;
-                const newPassword = document.getElementById('newPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
-
-                if (currentPassword !== storedPassword) {
-                    showAlert('Error', 'La contraseña actual es incorrecta.'); return;
-                }
-                if (!newPassword || newPassword.length < 4) {
-                    showAlert('Error', 'La nueva contraseña debe tener al menos 4 caracteres.'); return;
-                }
-                if (newPassword !== confirmPassword) {
-                    showAlert('Error', 'Las nuevas contraseñas no coinciden.'); return;
-                }
-                
-                localStorage.setItem('adminPassword', newPassword);
-                showAlert('Éxito', 'La contraseña ha sido actualizada correctamente.');
-                passwordChangeForm.reset();
-                settingsModal.style.display = 'none';
-            });
-
-            function loadAlarmState() {
-                const alarmsEnabled = localStorage.getItem('alarmsEnabled') !== 'false';
-                alarmToggle.checked = alarmsEnabled;
-                document.body.classList.toggle('alarms-active', alarmsEnabled);
-            }
-            alarmToggle.addEventListener('change', () => {
-                const isEnabled = alarmToggle.checked;
-                localStorage.setItem('alarmsEnabled', isEnabled);
-                document.body.classList.toggle('alarms-active', isEnabled);
-            });
-
-
-            // --- Funciones de Utilidad ---
-            function getContrastColor(hex) { if (!hex) return '#000000'; const r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16); return (((r * 299) + (g * 587) + (b * 114)) / 1000 >= 128) ? '#000000' : '#ffffff'; }
-            function setConnectionStatus(status, message) { const dot = connectionStatusDot, text = connectionStatusText; dot.className = 'relative inline-flex rounded-full h-3 w-3'; dot.parentElement.querySelector('.animate-ping')?.classList.add('hidden'); if (status === 'connected') { dot.classList.add('bg-green-500'); text.textContent = message || 'Conectado'; } else if (status === 'error') { dot.classList.add('bg-red-500'); text.textContent = message || 'Error'; } else { dot.classList.add('bg-gray-500'); text.textContent = message || 'Conectando...'; } }
-            function showAlert(title, message) { alertTitle.textContent = title; alertMessage.textContent = message; alertModal.style.display = 'flex'; }
-            
-            // --- Inicialización ---
-            loadCustomTheme();
-            loadAlarmState();
-            initializeBoard();
-            loadColors();
-            if (sessionStorage.getItem('isAuthenticated') === 'true') {
-                isAuthenticated = true;
-            }
+    function login(password) {
+        const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
+        if (password === storedPassword) {
+            isAuthenticated = true;
+            sessionStorage.setItem('isAuthenticated', 'true');
+            loginModal.style.display = 'none';
+            loginForm.reset();
+            loginError.classList.add('hidden');
             updateAuthStateUI();
-            fetchData();
+        } else {
+            loginError.classList.remove('hidden');
+        }
+    }
+
+    function logout() {
+        isAuthenticated = false;
+        sessionStorage.removeItem('isAuthenticated');
+        updateAuthStateUI();
+    }
+
+    // --- Funciones Principales ---
+    function initializeBoard() {
+        kanbanBoard.innerHTML = '';
+        KANBAN_COLUMNS.forEach(col => {
+            const columnEl = document.createElement('div');
+            columnEl.className = 'rounded-xl p-4 kanban-column relief-border';
+            columnEl.dataset.status = col.status;
+            columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
+            kanbanBoard.appendChild(columnEl);
         });
-    </script>
+    }
+
+    async function fetchData() {
+        setConnectionStatus('connecting');
+        loader.style.display = 'block';
+        kanbanBoard.style.display = 'none';
+        chartContainer.style.display = 'none';
+        try {
+            const response = await fetch(googleWebAppUrl);
+            if (!response.ok) throw new Error(`Error de Red (${response.status})`);
+            const data = await response.json();
+            if (data.status === 'error') throw new Error(`Error en Script: ${data.message}`);
+            casesData = data;
+            renderBoard(casesData);
+            updateDashboard(casesData);
+            setConnectionStatus('connected');
+        } catch (error) {
+            console.error('Error al obtener datos:', error);
+            loader.innerHTML = `<p class="text-red-500 font-bold">No se pudieron cargar los datos.<br><span class="text-sm text-gray-400">Mensaje: ${error.message}</span></p>`;
+            setConnectionStatus('error', 'Fallo de conexión');
+        } finally {
+            if (!loader.innerHTML.includes('Error')) {
+                loader.style.display = 'none';
+                kanbanBoard.style.display = 'grid';
+                chartContainer.style.display = 'block';
+            }
+        }
+    }
+
+    function renderBoard(data) {
+        document.querySelectorAll('.card-container').forEach(c => c.innerHTML = '');
+        KANBAN_COLUMNS.forEach(col => updateColumnCounter(col.status, 0, true));
+        if (Array.isArray(data)) {
+            data.forEach(caseItem => {
+                const card = createCardElement(caseItem);
+                const status = caseItem.estado ? String(caseItem.estado).trim() : null;
+                if (status) {
+                    const columnContainer = kanbanBoard.querySelector(`.kanban-column[data-status="${status}"] .card-container`);
+                    if (columnContainer) {
+                        columnContainer.appendChild(card);
+                        updateColumnCounter(status, 1);
+                    }
+                }
+            });
+        }
+        if (isAuthenticated) {
+            setupDragAndDrop();
+        }
+    }
+
+    function createCardElement(caseItem) {
+        const card = document.createElement('div');
+        card.className = 'kanban-card p-4 rounded-xl relief-border';
+        card.dataset.id = caseItem.id;
+        const bgColor = benefitColors[caseItem.beneficio] || benefitColors['Otro'];
+        const textColor = getContrastColor(bgColor);
+        const displayDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
+        
+        const statusDateMap = {
+            'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
+            'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
+            'Para Despacho': { field: 'fechaDespacho', label: 'Para Despacho' },
+            'Finalizado': { field: 'fechaFinalizado', label: 'Finalizado' }
+        };
+        let stateDateHTML = '';
+        const statusInfo = statusDateMap[caseItem.estado];
+        if (statusInfo) {
+            const stateDateValue = caseItem[statusInfo.field];
+            if (stateDateValue) {
+                const displayStateDate = new Date(stateDateValue).toLocaleDateString();
+                stateDateHTML = `<div class="mt-1">${statusInfo.label}: ${displayStateDate}</div>`;
+            }
+        }
+
+        card.innerHTML = `
+            <button class="delete-btn text-gray-400 dark:text-gray-500 ${isAuthenticated ? '' : 'hidden'}" data-id="${caseItem.id}">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
+            <div class="font-bold text-lg">${caseItem.expediente || 'S/N'}</div>
+            <div class="text-gray-600 text-sm mb-2 dark:text-gray-300">${caseItem.interno || 'S/N'}</div>
+            <div class="benefit-tag text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full" style="background-color: ${bgColor}; color: ${textColor};">${caseItem.beneficio || 'Otro'}</div>
+            <div class="text-xs text-gray-400 mt-2 card-dates">
+                <div>Ingreso: ${displayDate}</div>
+                ${stateDateHTML}
+            </div>
+        `;
+
+        if (caseItem.estado === 'En Gabinete' && caseItem.fechaEnvioGabinete) {
+            const entryDate = new Date(caseItem.fechaEnvioGabinete);
+            const today = new Date();
+            const timeDiff = today.getTime() - entryDate.getTime();
+            const daysInState = timeDiff / (1000 * 3600 * 24);
+            if (daysInState > 7) {
+                card.classList.add('alarm');
+            }
+        }
+
+        if (isAuthenticated) {
+            card.classList.add('editable', 'draggable');
+            card.draggable = true;
+            card.querySelector('.delete-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                caseIdToDelete = e.currentTarget.dataset.id;
+                deleteModal.style.display = 'flex';
+            });
+            card.addEventListener('click', () => openEditModal(caseItem));
+        }
+        return card;
+    }
+
+    function setupDragAndDrop() {
+        const cards = document.querySelectorAll('.draggable');
+        const columns = document.querySelectorAll('.kanban-column');
+        cards.forEach(card => {
+            card.addEventListener('dragstart', () => card.classList.add('dragging'));
+            card.addEventListener('dragend', () => card.classList.remove('dragging'));
+        });
+        columns.forEach(column => {
+            column.addEventListener('dragover', e => { e.preventDefault(); if (document.querySelector('.dragging')) column.classList.add('drag-over'); });
+            column.addEventListener('dragleave', () => column.classList.remove('drag-over'));
+            column.addEventListener('drop', e => {
+                e.preventDefault();
+                column.classList.remove('drag-over');
+                const draggingCard = document.querySelector('.dragging');
+                if (draggingCard) {
+                    const cardId = draggingCard.dataset.id;
+                    const newStatus = column.dataset.status;
+                    const oldStatus = draggingCard.closest('.kanban-column').dataset.status;
+                    if (oldStatus !== newStatus) {
+                        column.querySelector('.card-container').appendChild(draggingCard);
+                        updateColumnCounter(oldStatus, -1);
+                        updateColumnCounter(newStatus, 1);
+
+                        // --- INICIO: Actualización optimista de la tarjeta ---
+                        const caseItem = casesData.find(c => c.id === cardId);
+                        if (caseItem) {
+                            caseItem.estado = newStatus;
+                            const statusDateMap = {
+                                'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
+                                'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
+                                'Para Despacho': { field: 'fechaDespacho', label: 'Para Despacho' },
+                                'Finalizado': { field: 'fechaFinalizado', label: 'Finalizado' }
+                            };
+                            let stateDateHTML = '';
+                            const statusInfo = statusDateMap[newStatus];
+                            if (statusInfo) {
+                                const newDate = new Date();
+                                caseItem[statusInfo.field] = newDate.toISOString(); // Actualizar el dato local
+                                const displayStateDate = newDate.toLocaleDateString();
+                                stateDateHTML = `<div class="mt-1">${statusInfo.label}: ${displayStateDate}</div>`;
+                            }
+
+                            const dateContainer = draggingCard.querySelector('.card-dates');
+                            if (dateContainer) {
+                                const displayIngresoDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
+                                dateContainer.innerHTML = `<div>Ingreso: ${displayIngresoDate}</div>${stateDateHTML}`;
+                            }
+                        }
+                        // --- FIN: Actualización optimista de la tarjeta ---
+
+                        updateCaseStatus(cardId, newStatus);
+                    }
+                }
+            });
+        });
+    }
+
+    async function postData(payload) {
+        if (!isAuthenticated) {
+            showAlert('Acción no permitida', 'Debes iniciar sesión para realizar cambios.');
+            return;
+        }
+        const serverPassword = PASSWORD;
+        try {
+            await fetch(googleWebAppUrl, {
+                method: 'POST', body: JSON.stringify({...payload, password: serverPassword}),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, mode: 'no-cors',
+            });
+        } catch (error) {
+            console.warn('Error con no-cors (ignorar si la acción se completó):', error);
+            setConnectionStatus('error', 'Fallo al guardar');
+        }
+    }
+
+    // --- Funciones de Actualización de Datos ---
+    async function updateCaseStatus(id, newStatus) { 
+        await postData({ action: 'updateStatus', id, newStatus }); 
+        setTimeout(fetchData, 1500); // Recargar para confirmar datos desde el servidor
+    }
+    async function addNewCase(caseData) { await postData({ action: 'addCase', ...caseData }); }
+    async function updateCase(caseData) { await postData({ action: 'updateCase', ...caseData }); }
+    async function updateStateDate(payload) { await postData({ action: 'updateStateDate', ...payload }); }
+    
+    async function deleteCase(id) {
+        const cardElement = document.querySelector(`.kanban-card[data-id="${id}"]`);
+        if (cardElement) {
+            const status = cardElement.closest('.kanban-column').dataset.status;
+            cardElement.remove();
+            updateColumnCounter(status, -1);
+        }
+        casesData = casesData.filter(c => c.id !== id);
+        updateDashboard(casesData);
+        await postData({ action: 'deleteCase', id: id });
+    }
+
+    // --- Funciones de UI y Utilidades ---
+    function openEditModal(caseItem) {
+        document.getElementById('modalTitle').textContent = 'Editar Trámite';
+        
+        document.getElementById('caseId').value = caseItem.id || '';
+        document.getElementById('expediente').value = caseItem.expediente || '';
+        document.getElementById('interno').value = caseItem.interno || '';
+        document.getElementById('beneficio').value = caseItem.beneficio || 'Otro';
+        
+        if (caseItem.fechaIngreso) {
+            const date = new Date(caseItem.fechaIngreso);
+            const offset = date.getTimezoneOffset();
+            const adjustedDate = new Date(date.getTime() - (offset*60*1000));
+            document.getElementById('fechaIngreso').value = adjustedDate.toISOString().split('T')[0];
+        } else {
+            document.getElementById('fechaIngreso').value = '';
+        }
+
+        const statusDateMap = {
+            'En Gabinete': { field: 'fechaEnvioGabinete', label: 'Fecha de Envío a Gabinete' },
+            'Regreso': { field: 'fechaRegresoGabinete', label: 'Fecha de Regreso de Gabinete' },
+            'Para Despacho': { field: 'fechaDespacho', label: 'Fecha para Despacho' },
+            'Finalizado': { field: 'fechaFinalizado', label: 'Fecha de Finalización' }
+        };
+        const statusInfo = statusDateMap[caseItem.estado];
+
+        if (statusInfo) {
+            stateDateContainer.classList.remove('hidden');
+            stateDateEditLabel.textContent = statusInfo.label;
+            stateDateField.value = statusInfo.field;
+
+            const currentDate = caseItem[statusInfo.field];
+            if (currentDate) {
+                const date = new Date(currentDate);
+                const offset = date.getTimezoneOffset();
+                const adjustedDate = new Date(date.getTime() - (offset*60*1000));
+                stateDateEdit.value = adjustedDate.toISOString().split('T')[0];
+            } else {
+                stateDateEdit.value = '';
+            }
+        } else {
+            stateDateContainer.classList.add('hidden');
+            stateDateEdit.value = '';
+            stateDateField.value = '';
+        }
+        
+        caseModal.style.display = 'flex';
+    }
+
+    function updateDashboard(data) {
+        if (!Array.isArray(data)) return;
+        const activeCases = data.filter(c => c.estado !== 'Finalizado');
+        document.getElementById('total-activos').textContent = activeCases.length;
+        const casesInGabinete = data.filter(c => c.fechaEnvioGabinete && c.fechaRegresoGabinete);
+        if(casesInGabinete.length > 0) {
+            const totalTime = casesInGabinete.reduce((acc, c) => acc + (Math.abs(new Date(c.fechaRegresoGabinete) - new Date(c.fechaEnvioGabinete)) / (1000 * 60 * 60 * 24)), 0);
+            document.getElementById('avg-time').textContent = `${(totalTime / casesInGabinete.length).toFixed(1)} días`;
+        } else {
+            document.getElementById('avg-time').textContent = 'N/A';
+        }
+        const benefitCounts = activeCases.reduce((acc, c) => { acc[c.beneficio || 'Otro'] = (acc[c.beneficio || 'Otro'] || 0) + 1; return acc; }, {});
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        if (benefitsChart) benefitsChart.destroy();
+        benefitsChart = new Chart(document.getElementById('benefitsChart').getContext('2d'), {
+            type: 'pie',
+            data: {
+                labels: Object.keys(benefitCounts),
+                datasets: [{ data: Object.values(benefitCounts), backgroundColor: Object.keys(benefitCounts).map(label => benefitColors[label] || benefitColors['Otro']), borderColor: isDarkMode ? 'var(--dark-bg-general)' : 'var(--light-bg-general)', borderWidth: 3 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: isDarkMode ? '#d1d5db' : '#4b5563' } } } }
+        });
+    }
+
+    function updateColumnCounter(status, change, reset = false) {
+        const counterId = `count-${status.toLowerCase().replace(/ /g, '-')}`;
+        const counterElement = document.getElementById(counterId);
+        if (counterElement) {
+            counterElement.textContent = reset ? '0' : parseInt(counterElement.textContent) + change;
+        }
+    }
+
+    // --- Event Listeners ---
+    authBtn.addEventListener('click', () => {
+        if (isAuthenticated) { logout(); } else { loginModal.style.display = 'flex'; }
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        login(loginForm.querySelector('#password').value);
+    });
+
+    cancelLoginBtn.addEventListener('click', () => {
+        loginModal.style.display = 'none';
+        loginForm.reset();
+        loginError.classList.add('hidden');
+    });
+
+    addCaseBtn.addEventListener('click', () => {
+        caseForm.reset();
+        document.getElementById('modalTitle').textContent = 'Agregar Nuevo Trámite';
+        document.getElementById('caseId').value = '';
+        stateDateContainer.classList.add('hidden');
+        caseModal.style.display = 'flex';
+    });
+    
+    cancelBtn.addEventListener('click', () => caseModal.style.display = 'none');
+    caseModal.addEventListener('click', (e) => { if (e.target === caseModal) caseModal.style.display = 'none'; });
+
+    caseForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // --- INICIO: Lógica de feedback de guardado ---
+        const saveBtn = document.getElementById('saveCaseBtn');
+        const originalSaveText = saveBtn.innerHTML;
+        saveBtn.disabled = true;
+        cancelBtn.disabled = true;
+        saveBtn.innerHTML = `
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Guardando...
+        `;
+        // --- FIN: Lógica de feedback de guardado ---
+
+        const formData = new FormData(caseForm);
+        const caseId = formData.get('caseId');
+        const expedienteValue = formData.get('expediente').trim();
+        
+        if (casesData.some(item => item.expediente === expedienteValue && item.id !== caseId)) {
+            showAlert('Error: Expediente Duplicado', `El N° de expediente "${expedienteValue}" ya existe.`);
+            // Restaurar botón en caso de error
+            saveBtn.disabled = false;
+            cancelBtn.disabled = false;
+            saveBtn.innerHTML = originalSaveText;
+            return;
+        }
+
+        const caseData = {
+            id: caseId,
+            expediente: expedienteValue,
+            interno: formData.get('interno'),
+            beneficio: formData.get('beneficio'),
+            fechaIngreso: formData.get('fechaIngreso')
+        };
+        
+        if (caseId) {
+            await updateCase(caseData);
+            
+            if (!stateDateContainer.classList.contains('hidden') && stateDateEdit.value) {
+                const datePayload = {
+                    id: caseId,
+                    dateField: stateDateField.value,
+                    newDate: stateDateEdit.value
+                };
+                await updateStateDate(datePayload);
+            }
+        } else {
+            await addNewCase(caseData);
+        }
+        
+        caseModal.style.display = 'none';
+        // Restaurar botón para la próxima vez que se abra el modal
+        saveBtn.disabled = false;
+        cancelBtn.disabled = false;
+        saveBtn.innerHTML = originalSaveText;
+
+        setTimeout(fetchData, 1500);
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredData = casesData.filter(c => (c.expediente && c.expediente.toLowerCase().includes(searchTerm)) || (c.interno && c.interno.toLowerCase().includes(searchTerm)));
+        renderBoard(filteredData);
+    });
+
+    cancelDeleteBtn.addEventListener('click', () => deleteModal.style.display = 'none');
+    confirmDeleteBtn.addEventListener('click', () => { 
+        if (caseIdToDelete) {
+            deleteCase(caseIdToDelete);
+            setTimeout(fetchData, 1500);
+        }
+        deleteModal.style.display = 'none'; 
+    });
+    closeAlertBtn.addEventListener('click', () => alertModal.style.display = 'none');
+
+    // --- Lógica de Tema y Colores ---
+    function applyTheme(themeColors) {
+        for (const [key, value] of Object.entries(themeColors)) {
+            document.documentElement.style.setProperty(key, value);
+        }
+    }
+    function loadCustomTheme() {
+        const savedTheme = localStorage.getItem('customThemeColors');
+        if (savedTheme) { applyTheme(JSON.parse(savedTheme)); }
+    }
+    function toggleTheme() {
+        themeToggleDarkIcon.classList.toggle('hidden');
+        themeToggleLightIcon.classList.toggle('hidden');
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+        updateDashboard(casesData);
+    }
+    if ((localStorage.getItem('color-theme') === 'dark') || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        themeToggleLightIcon.classList.remove('hidden');
+        document.documentElement.classList.add('dark');
+    } else {
+        themeToggleDarkIcon.classList.remove('hidden');
+    }
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    function loadColors() { const savedColors = localStorage.getItem('benefitColors'); if (savedColors) benefitColors = JSON.parse(savedColors); }
+
+    // --- LÓGICA DEL MODAL DE CONFIGURACIÓN ---
+    settingsBtn.addEventListener('click', () => {
+        colorSettingsContainer.innerHTML = '';
+        for (const benefit in benefitColors) {
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between';
+            div.innerHTML = `<label class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
+            colorSettingsContainer.appendChild(div);
+        }
+        const currentTheme = JSON.parse(localStorage.getItem('customThemeColors')) || DEFAULT_THEME_COLORS;
+        document.getElementById('light-bg-general').value = currentTheme['--light-bg-general'];
+        document.getElementById('light-bg-content').value = currentTheme['--light-bg-content'];
+        document.getElementById('light-text-main').value = currentTheme['--light-text-main'];
+        document.getElementById('dark-bg-general').value = currentTheme['--dark-bg-general'];
+        document.getElementById('dark-bg-content').value = currentTheme['--dark-bg-content'];
+        document.getElementById('dark-text-main').value = currentTheme['--dark-text-main'];
+        appearanceTab.click();
+        settingsModal.style.display = 'flex';
+    });
+    const tabs = [appearanceTab, colorsTab, passwordTab];
+    const panels = [appearancePanel, colorsPanel, passwordPanel];
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            panels.forEach(p => p.classList.add('hidden'));
+            tab.classList.add('active');
+            panels[index].classList.remove('hidden');
+        });
+    });
+    cancelSettingsBtn.addEventListener('click', () => settingsModal.style.display = 'none');
+    resetColorsBtn.addEventListener('click', () => { for (const benefit in DEFAULT_BENEFIT_COLORS) document.getElementById(`color-${benefit}`).value = DEFAULT_BENEFIT_COLORS[benefit]; });
+    saveColorsBtn.addEventListener('click', () => {
+        const newColors = {};
+        for (const benefit in benefitColors) newColors[benefit] = document.getElementById(`color-${benefit}`).value;
+        benefitColors = newColors;
+        localStorage.setItem('benefitColors', JSON.stringify(benefitColors));
+        settingsModal.style.display = 'none';
+        renderBoard(casesData);
+        updateDashboard(casesData);
+    });
+    saveThemeBtn.addEventListener('click', () => {
+        const newTheme = {
+            '--light-bg-general': document.getElementById('light-bg-general').value,
+            '--light-bg-content': document.getElementById('light-bg-content').value,
+            '--light-text-main': document.getElementById('light-text-main').value,
+            '--dark-bg-general': document.getElementById('dark-bg-general').value,
+            '--dark-bg-content': document.getElementById('dark-bg-content').value,
+            '--dark-text-main': document.getElementById('dark-text-main').value
+        };
+        localStorage.setItem('customThemeColors', JSON.stringify(newTheme));
+        applyTheme(newTheme);
+        showAlert('Éxito', 'La apariencia ha sido guardada.');
+        settingsModal.style.display = 'none';
+    });
+    resetThemeBtn.addEventListener('click', () => {
+        localStorage.removeItem('customThemeColors');
+        applyTheme(DEFAULT_THEME_COLORS);
+        showAlert('Apariencia Restaurada', 'Se han restaurado los colores por defecto.');
+        settingsModal.style.display = 'none';
+    });
+    passwordChangeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const storedPassword = localStorage.getItem('adminPassword') || PASSWORD;
+        if (currentPassword !== storedPassword) { showAlert('Error', 'La contraseña actual es incorrecta.'); return; }
+        if (!newPassword || newPassword.length < 4) { showAlert('Error', 'La nueva contraseña debe tener al menos 4 caracteres.'); return; }
+        if (newPassword !== confirmPassword) { showAlert('Error', 'Las nuevas contraseñas no coinciden.'); return; }
+        localStorage.setItem('adminPassword', newPassword);
+        showAlert('Éxito', 'La contraseña ha sido actualizada correctamente.');
+        passwordChangeForm.reset();
+        settingsModal.style.display = 'none';
+    });
+    function loadAlarmState() {
+        const alarmsEnabled = localStorage.getItem('alarmsEnabled') !== 'false';
+        alarmToggle.checked = alarmsEnabled;
+        document.body.classList.toggle('alarms-active', alarmsEnabled);
+    }
+    alarmToggle.addEventListener('change', () => {
+        const isEnabled = alarmToggle.checked;
+        localStorage.setItem('alarmsEnabled', isEnabled);
+        document.body.classList.toggle('alarms-active', isEnabled);
+    });
+
+    // --- Funciones de Utilidad ---
+    function getContrastColor(hex) { if (!hex) return '#000000'; const r = parseInt(hex.substr(1, 2), 16), g = parseInt(hex.substr(3, 2), 16), b = parseInt(hex.substr(5, 2), 16); return (((r * 299) + (g * 587) + (b * 114)) / 1000 >= 128) ? '#000000' : '#ffffff'; }
+    function setConnectionStatus(status, message) { const dot = connectionStatusDot, text = connectionStatusText; dot.className = 'relative inline-flex rounded-full h-3 w-3'; dot.parentElement.querySelector('.animate-ping')?.classList.add('hidden'); if (status === 'connected') { dot.classList.add('bg-green-500'); text.textContent = message || 'Conectado'; } else if (status === 'error') { dot.classList.add('bg-red-500'); text.textContent = message || 'Error'; } else { dot.classList.add('bg-gray-500'); text.textContent = message || 'Conectando...'; } }
+    function showAlert(title, message) { alertTitle.textContent = title; alertMessage.textContent = message; alertModal.style.display = 'flex'; }
+
+    // --- Inicialización ---
+    loadCustomTheme();
+    loadAlarmState();
+    initializeBoard();
+    loadColors();
+    if (sessionStorage.getItem('isAuthenticated') === 'true') {
+        isAuthenticated = true;
+    }
+    updateAuthStateUI();
+    fetchData();
+});
+</script>
 </body>
 </html>
->

@@ -79,15 +79,17 @@
         /* --- INICIO: Corrección de color de títulos en modo claro --- */
         html:not(.dark) .main-header h1,
         html:not(.dark) .main-header h2,
-        html:not(.dark) .main-header p#header-subtitle {
-            color: #000; /* Forzar negro en modo claro */
+        html:not(.dark) .main-header p,
+        html:not(.dark) .kanban-column h2,
+        html:not(.dark) .modal-content h2,
+        html:not(.dark) .modal-content label,
+        html:not(.dark) .bg-white-relief h3,
+        html:not(.dark) #settingsModal h3,
+        html:not(.dark) #settingsModal label {
+            color: #000;
         }
         /* --- FIN: Corrección de color de títulos en modo claro --- */
 
-        /* --- Corrección de visibilidad en modo claro --- */
-        html:not(.dark) .text-gray-500 { color: var(--light-text-secondary); }
-        html:not(.dark) .text-gray-600 { color: var(--light-text-main); }
-        html:not(.dark) .text-gray-400 { color: var(--light-text-tertiary); }
         /* --- Estilos de Alarma --- */
         @keyframes blinking-alarm {
             0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
@@ -162,8 +164,8 @@
 
         <!-- Dashboard de Estadísticas -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Total Activos</h3><p id="total-activos" class="text-3xl font-bold">0</p></div>
-            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium text-gray-500">Tiempo Prom. en Gabinete</h3><p id="avg-time" class="text-3xl font-bold">N/A</p></div>
+            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium dark:text-gray-400">Total Activos</h3><p id="total-activos" class="text-3xl font-bold">0</p></div>
+            <div class="bg-white p-4 rounded-xl relief-border bg-white-relief"><h3 class="text-sm font-medium dark:text-gray-400">Tiempo Prom. en Gabinete</h3><p id="avg-time" class="text-3xl font-bold">N/A</p></div>
         </div>
 
         <!-- Loader -->
@@ -177,7 +179,7 @@
 
         <!-- Gráfico de Beneficios -->
         <div id="chart-container" class="bg-white p-6 rounded-xl mt-6 hidden relief-border bg-white-relief">
-            <h3 class="text-lg font-medium mb-4">Distribución de Beneficios Activos</h3>
+            <h3 class="text-lg font-medium mb-4 dark:text-white">Distribución de Beneficios Activos</h3>
             <div class="relative h-80"><canvas id="benefitsChart"></canvas></div>
         </div>
     </div>
@@ -185,10 +187,10 @@
     <!-- Modals -->
     <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl p-8 w-full max-w-sm transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 class="text-2xl font-bold mb-4">Acceso de Administrador</h2>
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Acceso de Administrador</h2>
             <form id="loginForm">
                 <div class="mb-4">
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña</label>
+                    <label for="password" class="block text-sm font-medium dark:text-gray-300">Contraseña</label>
                     <input type="password" id="password" name="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
                 </div>
                 <p id="loginError" class="text-red-500 text-sm mb-4 hidden">Contraseña incorrecta.</p>
@@ -202,17 +204,17 @@
 
     <div id="caseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 id="modalTitle" class="text-2xl font-bold mb-4">Agregar Nuevo Trámite</h2>
+            <h2 id="modalTitle" class="text-2xl font-bold mb-4 dark:text-white">Agregar Nuevo Trámite</h2>
             <form id="caseForm">
                 <input type="hidden" id="caseId" name="caseId">
-                <div class="mb-4"><label for="expediente" class="block text-sm font-medium text-gray-700 dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="interno" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="beneficio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
+                <div class="mb-4"><label for="expediente" class="block text-sm font-medium dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-4"><label for="interno" class="block text-sm font-medium dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                <div class="mb-4"><label for="beneficio" class="block text-sm font-medium dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
                 
                 <!-- INICIO: Campo de fecha de estado dinámico -->
                 <div id="stateDateContainer" class="mb-6 hidden border-t pt-4 mt-4">
-                    <label id="stateDateEditLabel" for="stateDateEdit" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Fecha de Estado</label>
+                    <label id="stateDateEditLabel" for="stateDateEdit" class="block text-sm font-medium dark:text-gray-300">Fecha de Estado</label>
                     <input type="date" id="stateDateEdit" name="stateDateEdit" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     <input type="hidden" id="stateDateField" name="stateDateField">
                 </div>
@@ -229,7 +231,7 @@
 
     <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-30">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 class="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Confirmar Eliminación</h2>
             <p class="text-gray-600 dark:text-gray-300 mb-6">¿Estás seguro de que deseas eliminar este beneficio? Esta acción no se puede deshacer.</p>
             <div class="flex justify-end space-x-4"><button type="button" id="cancelDeleteBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button><button type="button" id="confirmDeleteBtn" class="bg-red-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-red-700 relief-button">Eliminar</button></div>
         </div>
@@ -246,7 +248,7 @@
     <!-- MODAL DE CONFIGURACIÓN -->
     <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-lg transform transition-all dark:bg-gray-800 relief-border modal-content">
-            <h2 class="text-2xl font-bold mb-4">Configuración</h2>
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Configuración</h2>
             <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
                 <div id="appearance-tab" class="settings-tab active">Apariencia</div>
                 <div id="colors-tab" class="settings-tab">Colores Tarjetas</div>
@@ -256,19 +258,19 @@
                 <p class="text-sm text-gray-500 mb-6">Ajusta los colores principales de la interfaz para el modo claro y oscuro.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Claro</h3>
+                        <h3 class="text-lg font-semibold mb-4 border-b pb-2 dark:text-white">Modo Claro</h3>
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between"><label for="light-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="light-bg-general"></div>
-                            <div class="flex items-center justify-between"><label for="light-bg-content" class="text-gray-700 dark:text-gray-300">Fondo Contenido</label><input type="color" id="light-bg-content"></div>
-                            <div class="flex items-center justify-between"><label for="light-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="light-text-main"></div>
+                            <div class="flex items-center justify-between"><label for="light-bg-general" class="dark:text-gray-300">Fondo General</label><input type="color" id="light-bg-general"></div>
+                            <div class="flex items-center justify-between"><label for="light-bg-content" class="dark:text-gray-300">Fondo Contenido</label><input type="color" id="light-bg-content"></div>
+                            <div class="flex items-center justify-between"><label for="light-text-main" class="dark:text-gray-300">Texto Principal</label><input type="color" id="light-text-main"></div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold mb-4 border-b pb-2">Modo Oscuro</h3>
+                        <h3 class="text-lg font-semibold mb-4 border-b pb-2 dark:text-white">Modo Oscuro</h3>
                         <div class="space-y-4">
-                            <div class="flex items-center justify-between"><label for="dark-bg-general" class="text-gray-700 dark:text-gray-300">Fondo General</label><input type="color" id="dark-bg-general"></div>
-                            <div class="flex items-center justify-between"><label for="dark-bg-content" class="text-gray-700 dark:text-gray-300">Fondo Contenido</label><input type="color" id="dark-bg-content"></div>
-                            <div class="flex items-center justify-between"><label for="dark-text-main" class="text-gray-700 dark:text-gray-300">Texto Principal</label><input type="color" id="dark-text-main"></div>
+                            <div class="flex items-center justify-between"><label for="dark-bg-general" class="dark:text-gray-300">Fondo General</label><input type="color" id="dark-bg-general"></div>
+                            <div class="flex items-center justify-between"><label for="dark-bg-content" class="dark:text-gray-300">Fondo Contenido</label><input type="color" id="dark-bg-content"></div>
+                            <div class="flex items-center justify-between"><label for="dark-text-main" class="dark:text-gray-300">Texto Principal</label><input type="color" id="dark-text-main"></div>
                         </div>
                     </div>
                 </div>
@@ -289,15 +291,15 @@
                 <p class="text-sm text-gray-500 mb-6">Para cambiar la contraseña de administrador, ingresa la actual y luego la nueva.</p>
                 <form id="passwordChangeForm" class="space-y-4">
                     <div>
-                        <label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña Actual</label>
+                        <label for="currentPassword" class="block text-sm font-medium dark:text-gray-300">Contraseña Actual</label>
                         <input type="password" id="currentPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                     <div>
-                        <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nueva Contraseña</label>
+                        <label for="newPassword" class="block text-sm font-medium dark:text-gray-300">Nueva Contraseña</label>
                         <input type="password" id="newPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                     <div>
-                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirmar Nueva Contraseña</label>
+                        <label for="confirmPassword" class="block text-sm font-medium dark:text-gray-300">Confirmar Nueva Contraseña</label>
                         <input type="password" id="confirmPassword" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                     <div class="flex justify-end pt-4">
@@ -449,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const columnEl = document.createElement('div');
             columnEl.className = 'rounded-xl p-4 kanban-column relief-border';
             columnEl.dataset.status = col.status;
-            columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
+            columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center dark:text-white">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
             kanbanBoard.appendChild(columnEl);
         });
     }
@@ -875,7 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const benefit in benefitColors) {
             const div = document.createElement('div');
             div.className = 'flex items-center justify-between';
-            div.innerHTML = `<label class="text-gray-700 dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
+            div.innerHTML = `<label class="dark:text-gray-300">${benefit}</label><input type="color" id="color-${benefit}" value="${benefitColors[benefit]}">`;
             colorSettingsContainer.appendChild(div);
         }
         const currentTheme = JSON.parse(localStorage.getItem('customThemeColors')) || DEFAULT_THEME_COLORS;

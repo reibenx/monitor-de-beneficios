@@ -51,7 +51,7 @@
         .dark .kanban-card { background-color: var(--dark-card-bg); border-color: var(--dark-border); }
         .dark header h2, .dark header p, .dark .kanban-column h2, .dark #chart-container h3, .dark .text-gray-800 { color: var(--dark-text-main); }
         .dark .text-gray-500 { color: var(--dark-text-secondary); }
-        .dark input, .dark select { background-color: var(--dark-input-bg); border-color: var(--dark-border); color: var(--dark-text-secondary); }
+        .dark input, .dark select, .dark textarea { background-color: var(--dark-input-bg); border-color: var(--dark-border); color: var(--dark-text-secondary); }
         .dark input::placeholder { color: var(--dark-text-secondary); }
         .dark .kanban-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.25); border-color: rgba(255, 255, 255, 0.15); }
         .dark .relief-button { background-color: #21262d; border-color: var(--dark-border); box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 1px 3px 0 rgba(0,0,0,0.2); }
@@ -64,7 +64,8 @@
         .relief-button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15); }
         .relief-button:active { transform: translateY(0px); }
         /* --- Otros Estilos --- */
-        .kanban-column { min-height: 400px; }
+        .kanban-column { min-height: 400px; display: flex; flex-direction: column; }
+        .card-container { max-height: 60vh; overflow-y: auto; padding-right: 8px; flex-grow: 1; }
         .kanban-card { position: relative; }
         .kanban-card.editable { cursor: pointer; }
         .kanban-card.draggable { cursor: grab; }
@@ -189,7 +190,7 @@
         </div>
 
         <!-- Tablero Kanban -->
-        <div id="kanban-board" class="hidden grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+        <div id="kanban-board" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6"></div>
 
         <!-- Gráfico de Beneficios -->
         <div id="chart-container" class="bg-white p-6 rounded-xl mt-6 hidden relief-border bg-white-relief">
@@ -242,6 +243,29 @@
             </form>
         </div>
     </div>
+
+    <!-- INICIO: Modal de Finalización -->
+    <div id="finalizeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-30">
+        <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Finalizar Trámite</h2>
+            <form id="finalizeForm">
+                <input type="hidden" id="finalizeCaseId">
+                <div class="mb-4">
+                    <label for="motivoFinalizado" class="block text-sm font-medium dark:text-gray-300">Motivo / Razón de Finalización</label>
+                    <textarea id="motivoFinalizado" name="motivoFinalizado" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label for="enlaceResolucion" class="block text-sm font-medium dark:text-gray-300">Enlace a Resolución (Opcional)</label>
+                    <input type="url" id="enlaceResolucion" name="enlaceResolucion" placeholder="https://..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="cancelFinalizeBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
+                    <button type="submit" class="bg-green-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-green-700 relief-button">Confirmar Finalización</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- FIN: Modal de Finalización -->
 
     <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-30">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
@@ -341,11 +365,13 @@
 
 <script>
 // ----------- CONFIGURACIÓN -----------
-const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbw3uIDQLJ0DZkFneywGn8m32QzFwx256JhNgVM1xL8g4LdUK90Lo82goFe559bpKLDV/exec'; // URL de tu script
+const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbxyh0RytUKQsE9hTU4LmWvW2KgIS3-1oSG8blzddr82gAbzh6dNve2TfRBnce6nV4Tg/exec'; // URL de tu script
 const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
 const KANBAN_COLUMNS = [
-    { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-600' },
+    { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-800' },
     { status: 'En Gabinete', color: 'bg-yellow-300', textColor: 'text-yellow-800' },
+    { status: 'Fiscalía', color: 'bg-orange-300', textColor: 'text-orange-800' },
+    { status: 'Defensoría', color: 'bg-teal-300', textColor: 'text-teal-800' },
     { status: 'Regreso', color: 'bg-cyan-300', textColor: 'text-cyan-800' },
     { status: 'Para Despacho', color: 'bg-blue-300', textColor: 'text-blue-800' },
     { status: 'Finalizado', color: 'bg-green-300', textColor: 'text-green-800' }
@@ -389,6 +415,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stateDateEditLabel = document.getElementById('stateDateEditLabel');
     const stateDateEdit = document.getElementById('stateDateEdit');
     const stateDateField = document.getElementById('stateDateField');
+    // --- Selectores del Modal de Finalización ---
+    const finalizeModal = document.getElementById('finalizeModal');
+    const finalizeForm = document.getElementById('finalizeForm');
+    const cancelFinalizeBtn = document.getElementById('cancelFinalizeBtn');
+    const finalizeCaseId = document.getElementById('finalizeCaseId');
     // --- Selectores del Modal de Configuración ---
     const appearanceTab = document.getElementById('appearance-tab');
     const colorsTab = document.getElementById('colors-tab');
@@ -413,6 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Estado de la Aplicación ---
     let casesData = [];
     let benefitsChart = null;
+    let caseIdToFinalize = null;
     let caseIdToDelete = null;
     let isAuthenticated = false;
 
@@ -541,6 +573,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const displayDate = caseItem.fechaIngreso ? new Date(caseItem.fechaIngreso).toLocaleDateString() : 'N/A';
         
         const statusDateMap = {
+            'Fiscalía': { field: 'fechaEnvioFiscalia', label: 'Fiscalía' },
+            'Defensoría': { field: 'fechaEnvioDefensoria', label: 'Defensoría' },
             'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
             'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
             'Para Despacho': { field: 'fechaDespacho', label: 'Para Despacho' },
@@ -556,6 +590,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        let finalizadoHTML = '';
+        if (caseItem.estado === 'Finalizado') {
+            if (caseItem.motivoFinalizado) {
+                finalizadoHTML += `<p class="mt-2 text-xs italic">Motivo: ${caseItem.motivoFinalizado}</p>`;
+            }
+            if (caseItem.enlaceResolucion) {
+                finalizadoHTML += `<a href="${caseItem.enlaceResolucion}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block text-xs text-indigo-600 hover:underline">Ver Resolución</a>`;
+            }
+        }
+
         card.innerHTML = `
             <button class="delete-btn text-gray-400 dark:text-gray-500 ${isAuthenticated ? '' : 'hidden'}" data-id="${caseItem.id}">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -567,6 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div>Ingreso: ${displayDate}</div>
                 ${stateDateHTML}
             </div>
+            <div class="finalizado-info">${finalizadoHTML}</div>
         `;
 
         if (caseItem.estado === 'En Gabinete' && caseItem.fechaEnvioGabinete) {
@@ -611,6 +656,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const newStatus = column.dataset.status;
                     const oldStatus = draggingCard.closest('.kanban-column').dataset.status;
                     if (oldStatus !== newStatus) {
+                        
+                        if (newStatus === 'Finalizado') {
+                            caseIdToFinalize = cardId;
+                            finalizeModal.style.display = 'flex';
+                            // No mover la tarjeta visualmente hasta confirmar
+                            return; 
+                        }
+
                         column.querySelector('.card-container').appendChild(draggingCard);
                         updateColumnCounter(oldStatus, -1);
                         updateColumnCounter(newStatus, 1);
@@ -620,6 +673,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (caseItem) {
                             caseItem.estado = newStatus;
                             const statusDateMap = {
+                                'Fiscalía': { field: 'fechaEnvioFiscalia', label: 'Fiscalía' },
+                                'Defensoría': { field: 'fechaEnvioDefensoria', label: 'Defensoría' },
                                 'En Gabinete': { field: 'fechaEnvioGabinete', label: 'En Gabinete' },
                                 'Regreso': { field: 'fechaRegresoGabinete', label: 'Regreso' },
                                 'Para Despacho': { field: 'fechaDespacho', label: 'Para Despacho' },
@@ -671,6 +726,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await postData({ action: 'updateStatus', id, newStatus }); 
         setTimeout(fetchData, 1500); // Recargar para confirmar datos desde el servidor
     }
+    async function finalizeCase(payload) { await postData({ action: 'finalizeCase', ...payload }); }
     async function addNewCase(caseData) { await postData({ action: 'addCase', ...caseData }); }
     async function updateCase(caseData) { await postData({ action: 'updateCase', ...caseData }); }
     async function updateStateDate(payload) { await postData({ action: 'updateStateDate', ...payload }); }
@@ -706,6 +762,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const statusDateMap = {
+            'Fiscalía': { field: 'fechaEnvioFiscalia', label: 'Fecha de Envío a Fiscalía' },
+            'Defensoría': { field: 'fechaEnvioDefensoria', label: 'Fecha de Envío a Defensoría' },
             'En Gabinete': { field: 'fechaEnvioGabinete', label: 'Fecha de Envío a Gabinete' },
             'Regreso': { field: 'fechaRegresoGabinete', label: 'Fecha de Regreso de Gabinete' },
             'Para Despacho': { field: 'fechaDespacho', label: 'Fecha para Despacho' },
@@ -855,6 +913,25 @@ document.addEventListener('DOMContentLoaded', () => {
         saveBtn.innerHTML = originalSaveText;
 
         setTimeout(fetchData, 1500);
+    });
+
+    finalizeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const payload = {
+            id: caseIdToFinalize,
+            motivoFinalizado: document.getElementById('motivoFinalizado').value,
+            enlaceResolucion: document.getElementById('enlaceResolucion').value
+        };
+        await finalizeCase(payload);
+        finalizeModal.style.display = 'none';
+        finalizeForm.reset();
+        setTimeout(fetchData, 1500);
+    });
+
+    cancelFinalizeBtn.addEventListener('click', () => {
+        finalizeModal.style.display = 'none';
+        finalizeForm.reset();
+        fetchData(); // Recargar para restaurar la tarjeta a su estado original
     });
 
     searchInput.addEventListener('input', (e) => {

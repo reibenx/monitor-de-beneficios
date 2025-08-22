@@ -611,7 +611,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 finalizadoHTML += `<p class="mt-2 text-xs italic">Motivo: ${caseItem.motivoFinalizado}</p>`;
             }
             if (caseItem.enlaceResolucion) {
-                finalizadoHTML += `<a href="${caseItem.enlaceResolucion}" target="_blank" rel="noopener noreferrer" class="mt-2 inline-block text-xs text-indigo-600 hover:underline">Ver Resolución</a>`;
+                finalizadoHTML += `<a href="${caseItem.enlaceResolucion}" target="_blank" rel="noopener noreferrer" class="resolution-link mt-2 inline-block text-xs text-indigo-600 hover:underline">Ver Resolución</a>`;
             }
         }
 
@@ -648,6 +648,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 deleteModal.style.display = 'flex';
             });
             card.addEventListener('click', () => openEditModal(caseItem));
+            
+            // --- INICIO: Corrección de propagación de evento ---
+            const resolutionLink = card.querySelector('.resolution-link');
+            if (resolutionLink) {
+                resolutionLink.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+            // --- FIN: Corrección de propagación de evento ---
         }
         return card;
     }

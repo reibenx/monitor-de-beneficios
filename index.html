@@ -235,6 +235,19 @@
                 </div>
                 <!-- FIN: Campo de fecha de estado dinámico -->
 
+                <!-- INICIO: Campos de Finalización para Edición -->
+                <div id="finalizeFieldsContainer" class="hidden border-t pt-4 mt-4">
+                    <div class="mb-4">
+                        <label for="motivoFinalizadoEdit" class="block text-sm font-medium dark:text-gray-300">Motivo de Finalización</label>
+                        <textarea id="motivoFinalizadoEdit" name="motivoFinalizadoEdit" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                    </div>
+                    <div class="mb-6">
+                        <label for="enlaceResolucionEdit" class="block text-sm font-medium dark:text-gray-300">Enlace a Resolución</label>
+                        <input type="url" id="enlaceResolucionEdit" name="enlaceResolucionEdit" placeholder="https://..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+                <!-- FIN: Campos de Finalización para Edición -->
+
                 <div class="flex justify-end space-x-4">
                     <button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
                     <!-- BOTÓN DE GUARDAR MODIFICADO -->
@@ -815,6 +828,15 @@ document.addEventListener('DOMContentLoaded', () => {
             stateDateField.value = '';
         }
         
+        const finalizeFieldsContainer = document.getElementById('finalizeFieldsContainer');
+        if (caseItem.estado === 'Finalizado') {
+            finalizeFieldsContainer.classList.remove('hidden');
+            document.getElementById('motivoFinalizadoEdit').value = caseItem.motivoFinalizado || '';
+            document.getElementById('enlaceResolucionEdit').value = caseItem.enlaceResolucion || '';
+        } else {
+            finalizeFieldsContainer.classList.add('hidden');
+        }
+
         caseModal.style.display = 'flex';
     }
 
@@ -871,6 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('modalTitle').textContent = 'Agregar Nuevo Trámite';
         document.getElementById('caseId').value = '';
         stateDateContainer.classList.add('hidden');
+        document.getElementById('finalizeFieldsContainer').classList.add('hidden');
         caseModal.style.display = 'flex';
     });
     
@@ -916,6 +939,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         if (caseId) {
+            const finalizeFieldsContainer = document.getElementById('finalizeFieldsContainer');
+            if (!finalizeFieldsContainer.classList.contains('hidden')) {
+                caseData.motivoFinalizado = document.getElementById('motivoFinalizadoEdit').value;
+                caseData.enlaceResolucion = document.getElementById('enlaceResolucionEdit').value;
+            }
             await updateCase(caseData);
             
             if (!stateDateContainer.classList.contains('hidden') && stateDateEdit.value) {

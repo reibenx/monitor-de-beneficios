@@ -220,40 +220,40 @@
     <div id="caseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
         <div class="bg-white rounded-xl p-8 w-full max-w-md transform transition-all dark:bg-gray-800 relief-border modal-content">
             <h2 id="modalTitle" class="text-2xl font-bold mb-4 dark:text-white">Agregar Nuevo Trámite</h2>
-            <form id="caseForm">
-                <input type="hidden" id="caseId" name="caseId">
-                <div class="mb-4"><label for="expediente" class="block text-sm font-medium dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="interno" class="block text-sm font-medium dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
-                <div class="mb-4"><label for="beneficio" class="block text-sm font-medium dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
-                
-                <!-- INICIO: Campo de fecha de estado dinámico -->
-                <div id="stateDateContainer" class="mb-6 hidden border-t pt-4 mt-4">
-                    <label id="stateDateEditLabel" for="stateDateEdit" class="block text-sm font-medium dark:text-gray-300">Fecha de Estado</label>
-                    <input type="date" id="stateDateEdit" name="stateDateEdit" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <input type="hidden" id="stateDateField" name="stateDateField">
-                </div>
-                <!-- FIN: Campo de fecha de estado dinámico -->
-
-                <!-- INICIO: Campos de Finalización para Edición -->
-                <div id="finalizeFieldsContainer" class="hidden border-t pt-4 mt-4">
-                    <div class="mb-4">
-                        <label for="motivoFinalizadoEdit" class="block text-sm font-medium dark:text-gray-300">Motivo de Finalización</label>
-                        <textarea id="motivoFinalizadoEdit" name="motivoFinalizadoEdit" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+            <div class="max-h-[80vh] overflow-y-auto pr-4">
+                <form id="caseForm">
+                    <input type="hidden" id="caseId" name="caseId">
+                    <div class="mb-4"><label for="expediente" class="block text-sm font-medium dark:text-gray-300">N° de Expediente</label><input type="text" id="expediente" name="expediente" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                    <div class="mb-4"><label for="interno" class="block text-sm font-medium dark:text-gray-300">Nombre del Interno/a</label><input type="text" id="interno" name="interno" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                    <div class="mb-4"><label for="fechaIngreso" class="block text-sm font-medium dark:text-gray-300">Fecha de Ingreso</label><input type="date" id="fechaIngreso" name="fechaIngreso" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required></div>
+                    <div class="mb-4"><label for="beneficio" class="block text-sm font-medium dark:text-gray-300">Tipo de Beneficio</label><select id="beneficio" name="beneficio" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600" required><option>Salidas Transitorias</option><option>Prisión Domiciliaria</option><option>Estímulo Educativo</option><option>Libertad Asistida</option><option>Libertad Condicional</option><option>Régimen Preparatorio</option><option>Otro</option></select></div>
+                    
+                    <!-- INICIO: Campo de fecha de estado dinámico -->
+                    <div id="stateDateContainer" class="mb-6 hidden border-t pt-4 mt-4">
+                        <label id="stateDateEditLabel" for="stateDateEdit" class="block text-sm font-medium dark:text-gray-300">Fecha de Estado</label>
+                        <input type="date" id="stateDateEdit" name="stateDateEdit" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="hidden" id="stateDateField" name="stateDateField">
                     </div>
-                    <div class="mb-6">
-                        <label for="enlaceResolucionEdit" class="block text-sm font-medium dark:text-gray-300">Enlace a Resolución</label>
-                        <input type="url" id="enlaceResolucionEdit" name="enlaceResolucionEdit" placeholder="https://..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                </div>
-                <!-- FIN: Campos de Finalización para Edición -->
+                    <!-- FIN: Campo de fecha de estado dinámico -->
 
-                <div class="flex justify-end space-x-4">
-                    <button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
-                    <!-- BOTÓN DE GUARDAR MODIFICADO -->
-                    <button type="submit" id="saveCaseBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button w-36 flex justify-center items-center">Guardar</button>
-                </div>
-            </form>
+                    <!-- INICIO: Campos de Finalización para Edición -->
+                    <div id="finalizeFieldsContainer" class="hidden border-t pt-4 mt-4">
+                        <div class="mb-4">
+                            <label for="motivoFinalizadoEdit" class="block text-sm font-medium dark:text-gray-300">Motivo de Finalización</label>
+                            <textarea id="motivoFinalizadoEdit" name="motivoFinalizadoEdit" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                        <div class="mb-6">
+                            <label for="enlaceResolucionEdit" class="block text-sm font-medium dark:text-gray-300">Enlace a Resolución</label>
+                            <input type="url" id="enlaceResolucionEdit" name="enlaceResolucionEdit" placeholder="https://..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                    </div>
+                    <!-- FIN: Campos de Finalización para Edición -->
+                </form>
+            </div>
+            <div class="flex justify-end space-x-4 pt-4">
+                <button type="button" id="cancelBtn" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-xl hover:bg-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 relief-button">Cancelar</button>
+                <button type="submit" form="caseForm" id="saveCaseBtn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-xl hover:bg-indigo-700 relief-button w-36 flex justify-center items-center">Guardar</button>
+            </div>
         </div>
     </div>
 
@@ -378,7 +378,7 @@
 
 <script>
 // ----------- CONFIGURACIÓN -----------
-const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbxyh0RytUKQsE9hTU4LmWvW2KgIS3-1oSG8blzddr82gAbzh6dNve2TfRBnce6nV4Tg/exec'; // URL de tu script
+const googleWebAppUrl = 'https://script.google.com/macros/s/AKfycbx8a1ra_lrPBAwgaVVhi7b4eErvzrShl8FeNQA9KK7P4NebivLXvSDIRV-ZcctOhBz_/exec'; // URL de tu script
 const PASSWORD = '454545'; // Contraseña inicial. Se puede cambiar en el menú de configuración.
 const KANBAN_COLUMNS = [
     { status: 'Ingresado', color: 'bg-gray-300', textColor: 'text-gray-800' },

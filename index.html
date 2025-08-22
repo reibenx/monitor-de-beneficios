@@ -190,7 +190,7 @@
         </div>
 
         <!-- Tablero Kanban -->
-        <div id="kanban-board" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6"></div>
+        <div id="kanban-board" class="hidden"></div>
 
         <!-- Gráfico de Beneficios -->
         <div id="chart-container" class="bg-white p-6 rounded-xl mt-6 hidden relief-border bg-white-relief">
@@ -507,13 +507,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Funciones Principales ---
     function initializeBoard() {
         kanbanBoard.innerHTML = '';
-        KANBAN_COLUMNS.forEach(col => {
+        
+        const topRow = document.createElement('div');
+        topRow.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6';
+        
+        const bottomRow = document.createElement('div');
+        bottomRow.className = 'mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6';
+
+        KANBAN_COLUMNS.forEach((col, index) => {
             const columnEl = document.createElement('div');
             columnEl.className = 'rounded-xl p-4 kanban-column relief-border';
             columnEl.dataset.status = col.status;
             columnEl.innerHTML = `<h2 class="font-bold text-lg mb-4 flex justify-between items-center dark:text-white">${col.status}<span id="count-${col.status.toLowerCase().replace(/ /g, '-')}" class="text-sm ${col.color} ${col.textColor} rounded-full px-2 py-0.5">0</span></h2><div class="space-y-4 card-container"></div>`;
-            kanbanBoard.appendChild(columnEl);
+            
+            if (index < 4) {
+                topRow.appendChild(columnEl);
+            } else {
+                bottomRow.appendChild(columnEl);
+            }
         });
+
+        kanbanBoard.appendChild(topRow);
+        kanbanBoard.appendChild(bottomRow);
     }
 
     async function fetchData() {
@@ -537,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             if (!loader.innerHTML.includes('Error')) {
                 loader.style.display = 'none';
-                kanbanBoard.style.display = 'grid';
+                kanbanBoard.style.display = 'block';
                 chartContainer.style.display = 'block';
             }
         }
